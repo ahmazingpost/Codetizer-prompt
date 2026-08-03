@@ -1,0 +1,407 @@
+# CURRENT TASK
+
+Build ONLY PAGE 8
+
+PAGE NAME
+
+Help & Documentation (Knowledge Center)
+
+STOP after completing this page.
+
+Wait for approval before generating the next page.
+
+====================================================
+
+PURPOSE
+
+Create a professional Knowledge Center for CB CODETIZER.
+
+This page is the user's learning and support hub.
+
+The backend documentation system is NOT implemented yet.
+
+Use realistic placeholder content.
+
+====================================================
+
+DESIGN
+
+Inspired by
+
+Claude Desktop
+
+GitHub Docs
+
+JetBrains Help
+
+Linear
+
+Modern SaaS Documentation
+
+Dark Mode First
+
+Responsive
+
+====================================================
+
+LAYOUT
+
+Left Sidebar
+
+Documentation Navigation
+
+Center
+
+Documentation Viewer
+
+Right Sidebar
+
+Quick Links
+
+Related Articles
+
+Table of Contents
+
+====================================================
+
+HEADER
+
+Display
+
+CB CODETIZER Logo
+
+Breadcrumb
+
+Dashboard > Help
+
+Search Documentation
+
+Notifications
+
+History
+
+====================================================
+
+SEARCH
+
+Large documentation search bar.
+
+Placeholder live search.
+
+Suggestions.
+
+Recent searches.
+
+Popular searches.
+
+====================================================
+
+LEFT SIDEBAR
+
+Categories
+
+Getting Started
+
+Inspector Guide
+
+Sanitizer Guide
+
+Beautifier Guide
+
+Security Rules
+
+Supported File Types
+
+Reports
+
+History
+
+Settings
+
+Keyboard Shortcuts
+
+Troubleshooting
+
+FAQ
+
+Release Notes
+
+API (Coming Soon)
+
+Developer Guide (Coming Soon)
+
+====================================================
+
+MAIN CONTENT
+
+Professional documentation layout.
+
+Each article contains
+
+Title
+
+Description
+
+Estimated Reading Time
+
+Difficulty
+
+Category
+
+Last Updated (placeholder)
+
+Table of Contents
+
+Code examples
+
+Notes
+
+Tips
+
+Warnings
+
+Related Articles
+
+====================================================
+
+QUICK START
+
+Cards
+
+Run Your First Inspection
+
+Sanitize a File
+
+Beautify Code
+
+Generate Reports
+
+Export Results
+
+====================================================
+
+FAQ
+
+Accordion layout.
+
+Example questions
+
+How do I inspect SVG files?
+
+What file types are supported?
+
+How is the Security Score calculated?
+
+What does Threat Level mean?
+
+Can I restore sanitized code?
+
+====================================================
+
+TROUBLESHOOTING
+
+Cards
+
+File won't upload
+
+Parser errors
+
+Unsupported file
+
+Large file issues
+
+Export problems
+
+====================================================
+
+KEYBOARD SHORTCUTS
+
+Professional table.
+
+Shortcut
+
+Description
+
+Ctrl + O
+
+Open File
+
+Ctrl + Enter
+
+Analyze
+
+Ctrl + S
+
+Sanitize
+
+Ctrl + B
+
+Beautify
+
+Ctrl + Shift + C
+
+Copy Report
+
+====================================================
+
+VIDEOS (PLACEHOLDER)
+
+Recent Tutorials
+
+Getting Started
+
+Inspector
+
+Sanitizer
+
+Beautifier
+
+Reports
+
+====================================================
+
+WHAT'S NEW
+
+Version
+
+Recent improvements
+
+Bug fixes
+
+Upcoming features
+
+====================================================
+
+CONTACT & SUPPORT
+
+Documentation
+
+Community (placeholder)
+
+Bug Report (placeholder)
+
+Feature Request (placeholder)
+
+License Information
+
+====================================================
+
+EMPTY STATES
+
+No search results.
+
+No articles found.
+
+====================================================
+
+MODALS
+
+Search Results
+
+Article Preview
+
+Keyboard Shortcuts
+
+About Documentation
+
+====================================================
+
+PLACEHOLDER CONTENT
+
+Use realistic documentation text.
+
+No Lorem Ipsum.
+
+====================================================
+
+RESPONSIVENESS
+
+Desktop
+
+Laptop
+
+Tablet
+
+Mobile
+
+====================================================
+
+ACCESSIBILITY
+
+Keyboard navigation
+
+ARIA labels
+
+Semantic HTML
+
+Visible focus states
+
+====================================================
+
+FILES TO GENERATE
+
+Show folder structure first.
+
+Generate
+
+templates/help.php
+
+assets/css/help.css
+
+assets/js/help.js
+
+Generate ONLY files required for this page.
+
+====================================================
+
+QUALITY
+
+Production-ready
+
+Readable
+
+Reusable
+
+No duplicated CSS
+
+No duplicated JavaScript
+
+No inline CSS
+
+No inline JavaScript
+
+Follow WordPress Coding Standards.
+
+====================================================
+
+SELF REVIEW
+
+Before finishing
+
+Validate HTML
+
+Validate CSS
+
+Validate JavaScript
+
+Accessibility
+
+Responsiveness
+
+Performance
+
+Maintainability
+
+List
+
+Files created
+
+Components created
+
+Backend integration points
+
+Known limitations
+
+Future improvements
+
+STOP after Help & Documentation is complete.
