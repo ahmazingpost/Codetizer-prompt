@@ -1,0 +1,459 @@
+# CURRENT TASK
+
+Build ONLY PAGE 7
+
+PAGE NAME
+
+Settings
+
+STOP after completing this page.
+
+Wait for approval before generating the next page.
+
+====================================================
+
+PURPOSE
+
+The Settings page allows users to configure every aspect of CB CODETIZER.
+
+The backend settings engine is NOT implemented yet.
+
+Build a fully interactive frontend using realistic placeholder settings.
+
+All controls should function from a UI perspective.
+
+Prepare the UI for future backend integration.
+
+====================================================
+
+DESIGN
+
+Inspired by
+
+Claude Desktop
+
+Linear
+
+GitHub
+
+JetBrains
+
+Professional SaaS
+
+Dark Mode First
+
+Desktop First
+
+Responsive
+
+====================================================
+
+LAYOUT
+
+Left
+
+Settings Categories Sidebar
+
+Right
+
+Settings Content
+
+Sticky Save Bar
+
+====================================================
+
+HEADER
+
+Display
+
+CB CODETIZER Logo
+
+Breadcrumb
+
+Dashboard > Settings
+
+Search Settings
+
+Notifications
+
+History
+
+====================================================
+
+LEFT SIDEBAR
+
+Categories
+
+General
+
+Appearance
+
+Editor
+
+Inspector
+
+Sanitizer
+
+Beautifier
+
+Security
+
+Reports
+
+History
+
+Import & Export
+
+Advanced
+
+About
+
+====================================================
+
+GENERAL
+
+Plugin Name
+
+Version
+
+Language
+
+Timezone
+
+Auto Save
+
+Check for Updates (placeholder)
+
+====================================================
+
+APPEARANCE
+
+Dark Mode
+
+Light Mode
+
+System Theme
+
+Accent Color
+
+Font Size
+
+Compact Mode
+
+Animations
+
+Card Radius
+
+====================================================
+
+EDITOR
+
+Word Wrap
+
+Line Numbers
+
+Tab Size
+
+Spaces or Tabs
+
+Highlight Active Line
+
+Mini Map (placeholder)
+
+Code Folding (placeholder)
+
+Auto Detect Language
+
+Font Family
+
+Editor Theme
+
+====================================================
+
+INSPECTOR
+
+Scan Profile
+
+Quick
+
+Standard
+
+Deep
+
+Custom
+
+Scan on Upload
+
+Auto Detect Language
+
+Show Recommendations
+
+Show Rule IDs
+
+Show Code Snippets
+
+Show Line Numbers
+
+====================================================
+
+SANITIZER
+
+Sanitization Profile
+
+Quick
+
+Standard
+
+Strict
+
+Custom
+
+Remove Event Handlers
+
+Remove Dangerous URLs
+
+Remove Scripts
+
+Remove foreignObject
+
+Clean CSS
+
+Clean SVG
+
+Generate Removal Report
+
+====================================================
+
+BEAUTIFIER
+
+Indent Size
+
+Use Spaces
+
+Use Tabs
+
+Maximum Line Width
+
+Keep Comments
+
+Preserve Blank Lines
+
+Wrap Attributes
+
+Normalize Quotes
+
+====================================================
+
+SECURITY
+
+Allowed Protocols
+
+HTTPS
+
+HTTP
+
+Mailto
+
+Data:image
+
+Blocked Protocols
+
+javascript
+
+vbscript
+
+data:text/html
+
+data:application
+
+Upload Size Limit
+
+Allowed File Types
+
+====================================================
+
+REPORTS
+
+Default Export
+
+PDF
+
+JSON
+
+HTML
+
+Include Charts
+
+Include Recommendations
+
+Include Statistics
+
+====================================================
+
+HISTORY
+
+Enable History
+
+Maximum History Entries
+
+Auto Delete Old Records
+
+Export History
+
+Import History
+
+====================================================
+
+IMPORT / EXPORT
+
+Export Settings
+
+Import Settings
+
+Restore Defaults
+
+Backup Settings
+
+====================================================
+
+ADVANCED
+
+Developer Mode
+
+Debug Mode
+
+Performance Mode
+
+Experimental Features
+
+Reset Plugin
+
+====================================================
+
+SAVE BAR
+
+Sticky footer.
+
+Buttons
+
+Save Settings
+
+Reset
+
+Cancel
+
+Restore Defaults
+
+====================================================
+
+MODALS
+
+Restore Defaults
+
+Import Settings
+
+Export Settings
+
+Reset Plugin
+
+====================================================
+
+PLACEHOLDER DATA
+
+Populate every setting.
+
+Nothing should appear empty.
+
+====================================================
+
+RESPONSIVENESS
+
+Desktop
+
+Laptop
+
+Tablet
+
+Mobile
+
+====================================================
+
+ACCESSIBILITY
+
+Keyboard navigation
+
+Semantic HTML
+
+ARIA labels
+
+Visible focus states
+
+====================================================
+
+FILES TO GENERATE
+
+Show folder structure first.
+
+Generate
+
+templates/settings.php
+
+assets/css/settings.css
+
+assets/js/settings.js
+
+Generate ONLY files required for this page.
+
+====================================================
+
+QUALITY
+
+Readable
+
+Production-ready
+
+Reusable
+
+No duplicated CSS
+
+No duplicated JavaScript
+
+No inline CSS
+
+No inline JavaScript
+
+WordPress Coding Standards
+
+====================================================
+
+SELF REVIEW
+
+Before finishing
+
+Validate HTML
+
+Validate CSS
+
+Validate JavaScript
+
+Accessibility
+
+Responsiveness
+
+Performance
+
+Maintainability
+
+List
+
+Files created
+
+Components created
+
+Backend integration points
+
+Known limitations
+
+Future improvements
+
+STOP after Settings is complete.
