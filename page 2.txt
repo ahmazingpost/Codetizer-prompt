@@ -1,0 +1,473 @@
+# CURRENT TASK
+
+Build ONLY PAGE 2
+
+PAGE NAME
+
+Inspector
+
+STOP after completing this page.
+
+Wait for approval before generating the next page.
+
+====================================================
+
+PURPOSE
+
+The Inspector is the heart of CB CODETIZER.
+
+It analyzes code and displays security findings.
+
+The backend engine is NOT implemented yet.
+
+Build a fully interactive frontend using realistic placeholder data.
+
+Everything must function from a UI perspective.
+
+====================================================
+
+LAYOUT
+
+Professional desktop application.
+
+Claude Desktop inspired.
+
+Dark mode first.
+
+Responsive.
+
+====================================================
+
+HEADER
+
+Display:
+
+CB CODETIZER logo
+
+Breadcrumb
+
+Dashboard > Inspector
+
+History button
+
+Settings button
+
+Notifications button
+
+====================================================
+
+LEFT PANEL
+
+Upload Area
+
+Features
+
+Upload File button
+
+Drag & Drop Zone
+
+Paste Code button
+
+Supported Files
+
+HTML
+
+SVG
+
+CSS
+
+JavaScript
+
+XML
+
+JSON
+
+Display:
+
+Selected filename
+
+File size
+
+Language
+
+Encoding
+
+Lines
+
+Characters
+
+Remove File button
+
+====================================================
+
+CENTER PANEL
+
+Professional code editor.
+
+Do NOT use a plain textarea.
+
+Instead create an editor container ready for future syntax highlighting.
+
+Include
+
+Line numbers
+
+Code area
+
+Current line indicator
+
+Placeholder code
+
+Copy button
+
+Clear button
+
+Download Original button
+
+Word Wrap toggle
+
+Line Numbers toggle
+
+Theme toggle
+
+Fullscreen button
+
+====================================================
+
+TOP TOOLBAR
+
+Inspector Mode
+
+Analyze button
+
+Auto Detect Language
+
+Language dropdown
+
+Scan Profile dropdown
+
+Quick Scan
+
+Deep Scan
+
+Custom Scan
+
+====================================================
+
+RIGHT PANEL
+
+Security Summary
+
+Security Score
+
+Circular gauge
+
+Threat Level badge
+
+Threat Count
+
+Risk Rating
+
+Language
+
+File Type
+
+File Size
+
+Lines
+
+Scan Duration
+
+Status
+
+====================================================
+
+THREATS PANEL
+
+Collapsible.
+
+Grouped by
+
+Critical
+
+High
+
+Medium
+
+Low
+
+Information
+
+Each threat card contains
+
+Severity badge
+
+Rule ID
+
+Line Number
+
+Column
+
+Description
+
+Why it matters
+
+Recommendation
+
+Expand Details button
+
+Copy Details button
+
+====================================================
+
+SECURITY CHECKS
+
+Display checklist
+
+Scripts
+
+Event Handlers
+
+Dangerous URLs
+
+External References
+
+CSS Injection
+
+JavaScript Injection
+
+HTML Injection
+
+SVG Injection
+
+XSS
+
+XXE
+
+Malformed Tags
+
+Deprecated Elements
+
+Unsafe Attributes
+
+Unsafe CSS
+
+Unsafe JavaScript
+
+Each item should display
+
+Passed
+
+Warning
+
+Failed
+
+====================================================
+
+CODE STATISTICS
+
+Display
+
+Elements
+
+Attributes
+
+Classes
+
+IDs
+
+Comments
+
+External URLs
+
+Embedded Resources
+
+SVG Objects
+
+Scripts
+
+CSS Rules
+
+JS Blocks
+
+====================================================
+
+RECOMMENDATIONS
+
+Display intelligent placeholder recommendations.
+
+Example
+
+Remove inline event handlers.
+
+Avoid javascript: URLs.
+
+Replace deprecated SVG elements.
+
+====================================================
+
+BOTTOM ACTION BAR
+
+Copy Report
+
+Download Report
+
+Export JSON
+
+Export PDF
+
+Open Sanitizer
+
+Open Beautifier
+
+Run Again
+
+Clear Results
+
+====================================================
+
+MODALS
+
+Threat Details
+
+File Information
+
+Recommendation Details
+
+Export
+
+====================================================
+
+EMPTY STATES
+
+No file loaded.
+
+No threats found.
+
+Waiting for analysis.
+
+====================================================
+
+LOADING STATE
+
+Professional scanning animation.
+
+Progress bar.
+
+Animated status messages.
+
+Example
+
+Parsing HTML...
+
+Inspecting SVG...
+
+Checking URLs...
+
+Analyzing CSS...
+
+Generating Report...
+
+====================================================
+
+PLACEHOLDER DATA
+
+Use realistic demo data.
+
+Everything should look alive.
+
+====================================================
+
+RESPONSIVENESS
+
+Desktop
+
+Laptop
+
+Tablet
+
+Mobile
+
+Avoid horizontal scrolling.
+
+====================================================
+
+ACCESSIBILITY
+
+Keyboard navigation.
+
+Focus states.
+
+ARIA labels.
+
+Semantic HTML.
+
+====================================================
+
+FILES TO GENERATE
+
+Show folder structure first.
+
+Generate
+
+templates/inspector.php
+
+assets/css/inspector.css
+
+assets/js/inspector.js
+
+Only generate files required for this page.
+
+====================================================
+
+CODE QUALITY
+
+Human-readable.
+
+Production-ready.
+
+No duplicate CSS.
+
+No duplicate JavaScript.
+
+No unnecessary wrappers.
+
+No inline styles.
+
+No inline scripts.
+
+Follow WordPress Coding Standards.
+
+====================================================
+
+FINAL SELF REVIEW
+
+Before finishing:
+
+Check HTML validity.
+
+Check CSS validity.
+
+Check JavaScript syntax.
+
+Check responsiveness.
+
+Check accessibility.
+
+Check performance.
+
+Check maintainability.
+
+List:
+
+Files created
+
+Components created
+
+Backend integration points
+
+Known limitations
+
+Future improvements
+
+STOP after Inspector is complete.
