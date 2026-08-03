@@ -1,0 +1,409 @@
+# CURRENT TASK
+
+Build ONLY PAGE 3
+
+PAGE NAME
+
+Sanitizer
+
+STOP after completing this page.
+
+Wait for approval before generating the next page.
+
+====================================================
+
+PURPOSE
+
+The Sanitizer removes unsafe or potentially dangerous code from HTML, SVG, CSS, JavaScript, and XML.
+
+The backend sanitization engine is NOT implemented yet.
+
+Build a fully interactive frontend using realistic placeholder data.
+
+Everything must function from a UI perspective.
+
+====================================================
+
+DESIGN
+
+Claude Desktop inspired.
+
+Professional.
+
+Modern.
+
+Minimal.
+
+Dark mode first.
+
+Responsive.
+
+====================================================
+
+HEADER
+
+Display
+
+CB CODETIZER logo
+
+Breadcrumb
+
+Dashboard > Sanitizer
+
+History button
+
+Settings button
+
+Notifications
+
+====================================================
+
+LEFT PANEL
+
+Upload Area
+
+Features
+
+Upload File
+
+Drag & Drop
+
+Paste Code
+
+Supported file types
+
+HTML
+
+SVG
+
+CSS
+
+JavaScript
+
+XML
+
+JSON
+
+Display
+
+Filename
+
+Extension
+
+Language
+
+Encoding
+
+File Size
+
+Lines
+
+Characters
+
+====================================================
+
+CENTER PANEL
+
+Split View
+
+Left
+
+Original Code
+
+Right
+
+Sanitized Code
+
+Toolbar
+
+Copy
+
+Paste
+
+Clear
+
+Download Original
+
+Download Sanitized
+
+Fullscreen
+
+Word Wrap
+
+Line Numbers
+
+Theme Switch
+
+Both editors should be synchronized.
+
+====================================================
+
+TOP TOOLBAR
+
+Sanitizer Mode
+
+Sanitize Button
+
+Auto Detect Language
+
+Language Selector
+
+Sanitization Profile
+
+Quick
+
+Standard
+
+Strict
+
+Custom
+
+====================================================
+
+RIGHT PANEL
+
+Sanitization Summary
+
+Security Score Before
+
+Security Score After
+
+Threat Level Before
+
+Threat Level After
+
+Items Removed
+
+Items Modified
+
+Items Preserved
+
+Warnings
+
+Scan Duration
+
+====================================================
+
+REMOVED ITEMS
+
+Collapsible
+
+Each removed item contains
+
+Severity Badge
+
+Rule ID
+
+Line Number
+
+Element
+
+Reason
+
+Replacement
+
+Expand Details
+
+====================================================
+
+MODIFIED ITEMS
+
+Display
+
+Original Value
+
+New Value
+
+Reason
+
+====================================================
+
+SANITIZATION LOG
+
+Timeline
+
+Parsing File
+
+Checking Rules
+
+Removing Threats
+
+Cleaning CSS
+
+Cleaning SVG
+
+Cleaning HTML
+
+Generating Output
+
+Completed
+
+====================================================
+
+BOTTOM ACTIONS
+
+Copy Sanitized Code
+
+Download Sanitized File
+
+Open Inspector
+
+Open Beautifier
+
+Export Report
+
+Clear
+
+====================================================
+
+MODALS
+
+Before / After Comparison
+
+Sanitization Details
+
+File Information
+
+Export
+
+====================================================
+
+EMPTY STATES
+
+No File Selected
+
+Nothing Removed
+
+Ready to Sanitize
+
+====================================================
+
+LOADING
+
+Professional animation
+
+Status messages
+
+Example
+
+Parsing...
+
+Removing Event Handlers...
+
+Checking Dangerous URLs...
+
+Cleaning CSS...
+
+Finalizing...
+
+====================================================
+
+PLACEHOLDER DATA
+
+Use realistic examples
+
+Display
+
+onclick removed
+
+javascript: URL removed
+
+foreignObject removed
+
+script removed
+
+expression() removed
+
+====================================================
+
+RESPONSIVENESS
+
+Desktop
+
+Laptop
+
+Tablet
+
+Mobile
+
+====================================================
+
+ACCESSIBILITY
+
+Keyboard navigation
+
+ARIA labels
+
+Semantic HTML
+
+Visible focus states
+
+====================================================
+
+FILES TO GENERATE
+
+Show folder structure first.
+
+Generate
+
+templates/sanitizer.php
+
+assets/css/sanitizer.css
+
+assets/js/sanitizer.js
+
+Generate ONLY the files needed for this page.
+
+====================================================
+
+QUALITY
+
+Readable code
+
+Production-ready
+
+Modular
+
+Reusable
+
+No duplicated CSS
+
+No duplicated JavaScript
+
+No inline styles
+
+No inline scripts
+
+WordPress Coding Standards
+
+====================================================
+
+SELF REVIEW
+
+Before finishing
+
+Validate HTML
+
+Validate CSS
+
+Validate JavaScript
+
+Check responsiveness
+
+Check accessibility
+
+Check maintainability
+
+List
+
+Files created
+
+Components created
+
+Backend integration points
+
+Known limitations
+
+Future improvements
+
+STOP after Sanitizer is complete.
