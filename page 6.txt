@@ -1,0 +1,399 @@
+# CURRENT TASK
+
+Build ONLY PAGE 6
+
+PAGE NAME
+
+History
+
+STOP after completing this page.
+
+Wait for approval before generating the next page.
+
+====================================================
+
+PURPOSE
+
+The History page stores and displays all previous inspections, sanitizations and beautifications.
+
+The backend database is NOT implemented yet.
+
+Build a fully interactive frontend using realistic placeholder data.
+
+Everything should function from a UI perspective.
+
+====================================================
+
+DESIGN
+
+Inspired by
+
+Claude Desktop
+
+GitHub
+
+Linear
+
+Professional SaaS Dashboard
+
+Dark Mode First
+
+Desktop First
+
+Responsive
+
+====================================================
+
+HEADER
+
+Display
+
+CB CODETIZER Logo
+
+Breadcrumb
+
+Dashboard > History
+
+Search
+
+Notifications
+
+Settings
+
+====================================================
+
+TOP TOOLBAR
+
+Search History
+
+Filter Dropdown
+
+Sort Dropdown
+
+Date Range Picker
+
+Refresh
+
+Delete Selected
+
+Export History
+
+====================================================
+
+FILTER OPTIONS
+
+All
+
+Inspector
+
+Sanitizer
+
+Beautifier
+
+Safe
+
+Warning
+
+Critical
+
+Success
+
+Failed
+
+This Week
+
+This Month
+
+Custom Range
+
+====================================================
+
+MAIN TABLE
+
+Professional data table.
+
+Columns
+
+Select Checkbox
+
+Filename
+
+Tool Used
+
+Language
+
+Security Score
+
+Threat Level
+
+Threat Count
+
+Status
+
+Scan Date
+
+Duration
+
+Actions
+
+====================================================
+
+ACTIONS
+
+View
+
+Open
+
+Download Report
+
+Rescan
+
+Duplicate
+
+Delete
+
+====================================================
+
+DETAIL PANEL
+
+When a row is selected display
+
+Filename
+
+Full Path (placeholder)
+
+Language
+
+Tool Used
+
+Security Score
+
+Threat Level
+
+Threat Count
+
+Warnings
+
+Recommendations
+
+Last Modified
+
+Created
+
+Report ID
+
+====================================================
+
+SEARCH
+
+Instant search.
+
+Search by
+
+Filename
+
+Language
+
+Threat Level
+
+Date
+
+Tool
+
+====================================================
+
+SORTING
+
+Newest
+
+Oldest
+
+Highest Score
+
+Lowest Score
+
+Highest Threat
+
+Alphabetical
+
+====================================================
+
+STATISTICS
+
+Display cards
+
+Total Scans
+
+Inspector Runs
+
+Sanitizer Runs
+
+Beautifier Runs
+
+Average Security Score
+
+Critical Files
+
+Warnings
+
+Successful Scans
+
+====================================================
+
+CHARTS
+
+Use placeholder data.
+
+Recent Activity
+
+Scans Per Day
+
+Tool Usage
+
+Threat Trends
+
+====================================================
+
+EMPTY STATE
+
+No scan history available.
+
+Run your first scan to begin building history.
+
+====================================================
+
+LOADING
+
+Professional loading animation.
+
+Loading history...
+
+Preparing records...
+
+Completed.
+
+====================================================
+
+MODALS
+
+Delete Confirmation
+
+History Details
+
+Export History
+
+Filter Settings
+
+====================================================
+
+PLACEHOLDER DATA
+
+Generate realistic history.
+
+Example
+
+logo.svg
+
+profile.html
+
+style.css
+
+script.js
+
+index.html
+
+theme.svg
+
+====================================================
+
+RESPONSIVENESS
+
+Desktop
+
+Laptop
+
+Tablet
+
+Mobile
+
+====================================================
+
+ACCESSIBILITY
+
+Keyboard navigation
+
+ARIA labels
+
+Semantic HTML
+
+Visible focus states
+
+====================================================
+
+FILES TO GENERATE
+
+Show folder structure first.
+
+Generate
+
+templates/history.php
+
+assets/css/history.css
+
+assets/js/history.js
+
+Generate ONLY files required for this page.
+
+====================================================
+
+QUALITY
+
+Production-ready
+
+Readable
+
+Reusable
+
+No duplicated CSS
+
+No duplicated JavaScript
+
+No inline CSS
+
+No inline JavaScript
+
+WordPress Coding Standards
+
+====================================================
+
+SELF REVIEW
+
+Before finishing
+
+Validate HTML
+
+Validate CSS
+
+Validate JavaScript
+
+Accessibility
+
+Responsiveness
+
+Performance
+
+Maintainability
+
+List
+
+Files created
+
+Components created
+
+Backend integration points
+
+Known limitations
+
+Future improvements
+
+STOP after History is complete.
