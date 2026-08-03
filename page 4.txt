@@ -1,0 +1,385 @@
+# CURRENT TASK
+
+Build ONLY PAGE 4
+
+PAGE NAME
+
+Beautifier
+
+STOP after completing this page.
+
+Wait for approval before generating the next page.
+
+====================================================
+
+PURPOSE
+
+The Beautifier reformats HTML, SVG, CSS, JavaScript, XML and JSON into clean, human-readable code.
+
+IMPORTANT
+
+This page NEVER changes code logic.
+
+It ONLY changes formatting.
+
+The backend beautifier engine is NOT implemented yet.
+
+Build a fully interactive frontend using realistic placeholder data.
+
+====================================================
+
+DESIGN
+
+Claude Desktop inspired.
+
+Professional SaaS interface.
+
+Dark mode first.
+
+Modern.
+
+Minimal.
+
+Responsive.
+
+====================================================
+
+HEADER
+
+Display
+
+CB CODETIZER logo
+
+Breadcrumb
+
+Dashboard > Beautifier
+
+History
+
+Settings
+
+Notifications
+
+====================================================
+
+TOP TOOLBAR
+
+Beautifier Mode
+
+Beautify Button
+
+Auto Detect Language
+
+Language Dropdown
+
+Formatting Preset
+
+Compact
+
+Standard
+
+Expanded
+
+Custom
+
+====================================================
+
+LEFT PANEL
+
+Input Code
+
+Professional code editor container
+
+Display
+
+Upload button
+
+Paste button
+
+Drag & Drop
+
+Filename
+
+Language
+
+File Size
+
+Encoding
+
+Line Count
+
+Character Count
+
+Toolbar
+
+Copy
+
+Clear
+
+Download Original
+
+Word Wrap
+
+Line Numbers
+
+Fullscreen
+
+====================================================
+
+RIGHT PANEL
+
+Beautified Code
+
+Professional code editor container
+
+Toolbar
+
+Copy
+
+Download Beautified
+
+Compare
+
+Fullscreen
+
+Word Wrap
+
+Line Numbers
+
+====================================================
+
+CENTER PANEL
+
+Formatting Summary
+
+Display
+
+Original Lines
+
+Beautified Lines
+
+Indentation
+
+Tab Size
+
+Spaces
+
+Formatting Style
+
+Estimated Readability
+
+Formatting Time
+
+Status
+
+====================================================
+
+FORMATTING OPTIONS
+
+Indent Size
+
+2
+
+4
+
+Tabs
+
+Spaces
+
+Maximum Line Width
+
+Wrap Long Attributes
+
+Keep Comments
+
+Align Attributes
+
+Collapse Empty Tags
+
+Sort Attributes (placeholder only)
+
+Normalize Quotes (placeholder only)
+
+Preserve Blank Lines
+
+====================================================
+
+BEFORE / AFTER COMPARISON
+
+Side-by-side comparison.
+
+Highlight formatting differences only.
+
+No logic changes.
+
+====================================================
+
+BOTTOM ACTIONS
+
+Copy Beautified Code
+
+Download
+
+Export
+
+Open Inspector
+
+Open Sanitizer
+
+Run Again
+
+Clear
+
+====================================================
+
+MODALS
+
+Formatting Options
+
+Compare View
+
+File Information
+
+Export
+
+====================================================
+
+EMPTY STATES
+
+No file loaded.
+
+Ready to beautify.
+
+====================================================
+
+LOADING
+
+Professional animation.
+
+Status examples
+
+Analyzing structure...
+
+Formatting HTML...
+
+Formatting CSS...
+
+Formatting JavaScript...
+
+Formatting SVG...
+
+Generating output...
+
+Completed.
+
+====================================================
+
+PLACEHOLDER DATA
+
+Use realistic formatting examples.
+
+Show
+
+Before
+
+One long line of code.
+
+After
+
+Proper indentation.
+
+Readable spacing.
+
+Clean formatting.
+
+====================================================
+
+RESPONSIVENESS
+
+Desktop
+
+Laptop
+
+Tablet
+
+Mobile
+
+====================================================
+
+ACCESSIBILITY
+
+Keyboard navigation
+
+ARIA labels
+
+Semantic HTML
+
+Focus indicators
+
+====================================================
+
+FILES TO GENERATE
+
+Show folder structure first.
+
+Generate
+
+templates/beautifier.php
+
+assets/css/beautifier.css
+
+assets/js/beautifier.js
+
+Generate ONLY the files required for this page.
+
+====================================================
+
+QUALITY
+
+Human-readable code.
+
+Production-ready.
+
+Reusable components.
+
+No duplicated CSS.
+
+No duplicated JavaScript.
+
+No inline styles.
+
+No inline scripts.
+
+Follow WordPress Coding Standards.
+
+====================================================
+
+SELF REVIEW
+
+Before finishing
+
+Validate HTML
+
+Validate CSS
+
+Validate JavaScript
+
+Check responsiveness
+
+Check accessibility
+
+Check maintainability
+
+List
+
+Files created
+
+Components created
+
+Backend integration points
+
+Known limitations
+
+Future improvements
+
+STOP after Beautifier is complete.
