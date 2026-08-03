@@ -1,0 +1,383 @@
+# CURRENT TASK
+
+Build ONLY PAGE 10
+
+PAGE NAME
+
+Welcome & First-Time Setup Wizard
+
+STOP after completing this page.
+
+Wait for approval before generating additional components.
+
+====================================================
+
+PURPOSE
+
+Create a professional onboarding experience for first-time users of CB CODETIZER.
+
+This wizard should automatically appear the first time the plugin is activated.
+
+After completion, it should not appear again unless the user chooses to launch it from Settings.
+
+The backend onboarding logic is NOT implemented yet.
+
+Everything should work using frontend placeholder logic.
+
+====================================================
+
+DESIGN
+
+Inspired by
+
+Claude Desktop
+
+Linear
+
+GitHub
+
+Raycast
+
+JetBrains
+
+Professional SaaS onboarding
+
+Dark Mode First
+
+Responsive
+
+====================================================
+
+LAYOUT
+
+Centered Wizard
+
+Large Welcome Illustration Area
+
+Progress Steps
+
+Navigation Buttons
+
+====================================================
+
+HEADER
+
+Display
+
+CB CODETIZER Logo
+
+Plugin Version
+
+Skip Setup Button
+
+====================================================
+
+STEP 1
+
+Welcome
+
+Display
+
+Plugin logo
+
+Welcome message
+
+Brief explanation
+
+Main Features
+
+Inspector
+
+Sanitizer
+
+Beautifier
+
+Reports
+
+History
+
+Settings
+
+Buttons
+
+Next
+
+Skip
+
+====================================================
+
+STEP 2
+
+Choose Appearance
+
+Theme
+
+Dark
+
+Light
+
+System
+
+Accent Color
+
+Editor Font Size
+
+Compact Mode
+
+Live Preview
+
+====================================================
+
+STEP 3
+
+Editor Preferences
+
+Line Numbers
+
+Word Wrap
+
+Tab Size
+
+Spaces or Tabs
+
+Auto Detect Language
+
+Editor Theme
+
+====================================================
+
+STEP 4
+
+Security Preferences
+
+Default Scan Profile
+
+Quick
+
+Standard
+
+Deep
+
+Default Sanitizer Profile
+
+Quick
+
+Standard
+
+Strict
+
+Enable History
+
+Enable Reports
+
+====================================================
+
+STEP 5
+
+Supported File Types
+
+Display supported formats
+
+HTML
+
+SVG
+
+CSS
+
+JavaScript
+
+XML
+
+JSON
+
+Markdown
+
+TXT
+
+====================================================
+
+STEP 6
+
+Quick Tour
+
+Interactive cards
+
+Dashboard
+
+Inspector
+
+Sanitizer
+
+Beautifier
+
+Reports
+
+History
+
+Settings
+
+Each contains
+
+Screenshot Placeholder
+
+Description
+
+Open Page Button
+
+====================================================
+
+STEP 7
+
+Ready
+
+Summary
+
+Selected Settings
+
+Finish Setup
+
+Launch Dashboard
+
+Open Documentation
+
+====================================================
+
+PROGRESS BAR
+
+Professional horizontal step indicator.
+
+Highlight current step.
+
+Animated transitions.
+
+====================================================
+
+MODALS
+
+Skip Confirmation
+
+Reset Wizard
+
+Feature Details
+
+====================================================
+
+EMPTY STATES
+
+No settings selected.
+
+====================================================
+
+LOADING
+
+Professional loading animation.
+
+Saving preferences...
+
+Preparing workspace...
+
+Launching Dashboard...
+
+====================================================
+
+PLACEHOLDER DATA
+
+Populate every screen.
+
+No Lorem Ipsum.
+
+====================================================
+
+RESPONSIVENESS
+
+Desktop
+
+Laptop
+
+Tablet
+
+Mobile
+
+====================================================
+
+ACCESSIBILITY
+
+Keyboard navigation
+
+ARIA labels
+
+Semantic HTML
+
+Visible focus states
+
+====================================================
+
+FILES TO GENERATE
+
+Show folder structure first.
+
+Generate
+
+templates/welcome.php
+
+assets/css/welcome.css
+
+assets/js/welcome.js
+
+Generate ONLY files required for this page.
+
+====================================================
+
+QUALITY
+
+Readable
+
+Production-ready
+
+Reusable
+
+No duplicate CSS
+
+No duplicate JavaScript
+
+No inline CSS
+
+No inline JavaScript
+
+Follow WordPress Coding Standards.
+
+====================================================
+
+SELF REVIEW
+
+Before finishing
+
+Validate HTML
+
+Validate CSS
+
+Validate JavaScript
+
+Accessibility
+
+Responsiveness
+
+Performance
+
+Maintainability
+
+Check for duplicate code
+
+List
+
+Files created
+
+Components created
+
+Backend integration points
+
+Known limitations
+
+Future improvements
+
+STOP after Welcome & First-Time Setup Wizard is complete.
