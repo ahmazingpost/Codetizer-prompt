@@ -1,0 +1,4453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ATTN/ — The Attention Machine. A digital marketing agency that designs attention, builds culture and creates movement for brands that refuse to be ignored.">
+    <meta name="theme-color" content="#090909">
+    <title>ATTN/ — The Attention Machine</title>
+
+    <!-- =========================================
+         FONTS — Space Grotesk (display), DM Sans (body), IBM Plex Mono (technical)
+    ========================================= -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+    /* ============================================================
+       DESIGN TOKENS — THE ATTENTION MACHINE
+       Single source of truth for color, type, spacing, motion.
+       ============================================================ */
+    :root {
+        /* — Color system — */
+        --color-black: #090909;
+        --color-paper: #f7f5ef;
+        --color-lime: #c6ff00;
+        --color-pink: #ff3cac;
+        --color-orange: #ff6b00;
+        --color-blue: #245cff;
+
+        /* — Type families — */
+        --font-display: "Space Grotesk", "DM Sans", sans-serif;
+        --font-body: "DM Sans", "Space Grotesk", sans-serif;
+        --font-mono: "IBM Plex Mono", "DM Sans", monospace;
+
+        /* — Fluid type scale (clamp = min, preferred, max) — */
+        --fs-hero: clamp(3.5rem, 8vw, 9.5rem);
+        --fs-mega: clamp(2.8rem, 12vw, 12rem);
+        --fs-h1: clamp(2.2rem, 6vw, 5.5rem);
+        --fs-h2: clamp(1.6rem, 3.5vw, 3.2rem);
+        --fs-h3: clamp(1.2rem, 2vw, 1.75rem);
+        --fs-body: clamp(1rem, 1.05vw, 1.125rem);
+        --fs-small: 0.875rem;
+        --fs-mono: 0.75rem;
+
+        /* — Layout — */
+        --container: 1440px;
+        --container-wide: 1760px;
+        --page-pad: 32px;
+        --page-pad-mobile: 20px;
+        --section-gap: clamp(120px, 14vh, 220px);
+
+        /* — Motion — */
+        --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-in-out: cubic-bezier(0.83, 0, 0.17, 1);
+        --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        --dur-fast: 0.25s;
+        --dur: 0.6s;
+        --dur-slow: 1.2s;
+
+        /* — Z-index scale — */
+        --z-loader: 9999;
+        --z-cursor: 9000;
+        --z-header: 1000;
+        --z-overlay: 1100;
+    }
+
+    /* ============================================================
+       RESET / BASE
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+    body {
+        background: var(--color-black);
+        color: var(--color-paper);
+        font-family: var(--font-body);
+        font-size: var(--fs-body);
+        line-height: 1.5;
+        font-weight: 400;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+
+    /* Lock scroll while loader is active */
+    body.is-loading { overflow: hidden; height: 100vh; }
+
+    img, video, svg { display: block; max-width: 100%; height: auto; }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+    ul { list-style: none; }
+
+    ::selection { background: var(--color-lime); color: var(--color-black); }
+
+    /* Overflow safety: large display text wraps rather than overflows its container.
+       Applied to body so all descendants inherit it; can be tightened per-element below. */
+    body { overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: auto; hyphens: auto; }
+
+    :focus-visible {
+        outline: 2px solid var(--color-lime);
+        outline-offset: 4px;
+    }
+
+    /* Ensure grid/flex children with long-form text can shrink + wrap on narrow viewports. */
+    .positioning__inner > *,
+    .campaign--01 > *,
+    .campaign--05 > *,
+    .insights__featured > *,
+    .contact__inner > *,
+    .footer__top > * { min-width: 0; }
+
+    /* Large display headlines: explicit overflow safety (supplements body-level rule). */
+    .hero__headline,
+    .hero-transition__text,
+    .manifesto__main,
+    .services__title,
+    .campaign-reel__title,
+    .work__title,
+    .results__title,
+    .lab__title,
+    .process__title,
+    .process__stage-name,
+    .culture__title,
+    .proof__title,
+    .insights__title,
+    .insights__featured-headline,
+    .final-statement__text,
+    .contact__headline,
+    .footer__closing {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+
+    /* Hide custom cursor on touch; show system cursor */
+    @media (hover: none) and (pointer: coarse) {
+        .cursor-dot, .cursor-ring { display: none !important; }
+        body { cursor: auto; }
+    }
+    @media (hover: hover) and (pointer: fine) {
+        body { cursor: none; }
+        a, button, [data-cursor] { cursor: none; }
+    }
+
+    /* ============================================================
+       UTILITY / SHARED
+       ============================================================ */
+    .container {
+        width: 100%;
+        max-width: var(--container);
+        margin-inline: auto;
+        padding-inline: var(--page-pad);
+    }
+    .container--wide { max-width: var(--container-wide); }
+
+    .mono {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: 400;
+    }
+
+    .display {
+        font-family: var(--font-display);
+        font-weight: 700;
+        line-height: 0.88;
+        letter-spacing: -0.03em;
+    }
+
+    .lime { color: var(--color-lime); }
+    .pink { color: var(--color-pink); }
+    .orange { color: var(--color-orange); }
+    .blue { color: var(--color-blue); }
+    .black { color: var(--color-black); }
+    .paper { color: var(--color-paper); }
+
+    .section-label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--color-lime);
+    }
+    .section-label::before {
+        content: "";
+        width: 8px; height: 8px;
+        background: var(--color-lime);
+        border-radius: 50%;
+        animation: pulse-dot 1.6s var(--ease-in-out) infinite;
+    }
+    @keyframes pulse-dot {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.6); }
+    }
+
+    /* Scroll-reveal: default hidden, JS adds .is-visible */
+    [data-reveal] {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+        transition-delay: var(--reveal-delay, 0s);
+    }
+    [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
+
+    /* Lines used as visual separators */
+    .rule { width: 100%; height: 1px; background: rgba(247, 245, 239, 0.18); }
+    .rule--lime { background: var(--color-lime); }
+
+    /* ============================================================
+       LOADING SCREEN — campaign opening sequence
+       ============================================================ */
+    .loader {
+        position: fixed;
+        inset: 0;
+        background: var(--color-black);
+        z-index: var(--z-loader);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 32px;
+        overflow: hidden;
+    }
+    .loader__top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--color-paper);
+        opacity: 0.7;
+    }
+    .loader__brand {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.2rem;
+        letter-spacing: -0.02em;
+        opacity: 1;
+    }
+    .loader__brand .slash { color: var(--color-lime); }
+
+    .loader__center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        flex: 1;
+        gap: 24px;
+    }
+
+    .loader__slogan {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2rem, 7vw, 6rem);
+        line-height: 0.95;
+        letter-spacing: -0.03em;
+        color: var(--color-paper);
+        text-transform: uppercase;
+    }
+    .loader__slogan span {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(100%);
+        animation: loader-word 0.6s var(--ease-out) forwards;
+    }
+    @keyframes loader-word {
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .loader__counter-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        width: 100%;
+        gap: 24px;
+    }
+    .loader__counter {
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-size: clamp(4rem, 14vw, 12rem);
+        line-height: 0.85;
+        letter-spacing: -0.04em;
+        color: var(--color-lime);
+    }
+    .loader__counter .pct { color: var(--color-paper); opacity: 0.4; }
+
+    .loader__bar {
+        height: 2px;
+        background: rgba(247, 245, 239, 0.12);
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+    .loader__bar::after {
+        content: "";
+        position: absolute;
+        inset: 0 100% 0 0;
+        background: var(--color-lime);
+        animation: loader-progress 2.4s var(--ease-in-out) forwards;
+    }
+    @keyframes loader-progress {
+        to { right: 0; }
+    }
+
+    .loader__words {
+        position: absolute;
+        right: 32px;
+        top: 50%;
+        transform: translateY(-50%);
+        writing-mode: vertical-rl;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.3);
+    }
+
+    /* Exit: slide up & fade */
+    .loader.is-exiting {
+        transform: translateY(-100%);
+        transition: transform 0.9s var(--ease-in-out);
+    }
+
+    /* ============================================================
+       CUSTOM CURSOR
+       ============================================================ */
+    .cursor-dot, .cursor-ring {
+        position: fixed;
+        top: 0; left: 0;
+        pointer-events: none;
+        z-index: var(--z-cursor);
+        mix-blend-mode: difference;
+        will-change: transform;
+    }
+    .cursor-dot {
+        width: 6px; height: 6px;
+        background: var(--color-paper);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .cursor-ring {
+        width: 38px; height: 38px;
+        border: 1px solid var(--color-paper);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out),
+                    background 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
+    }
+    /* States */
+    .cursor-ring[data-state="view"] {
+        width: 90px; height: 90px;
+        background: var(--color-lime);
+        border-color: var(--color-lime);
+        mix-blend-mode: normal;
+    }
+    .cursor-ring[data-state="drag"] {
+        width: 70px; height: 70px;
+        border-color: var(--color-pink);
+    }
+    .cursor-ring[data-state="open"] {
+        width: 110px; height: 110px;
+        background: var(--color-paper);
+        border-color: var(--color-paper);
+        mix-blend-mode: normal;
+    }
+    .cursor-ring__label {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--color-black);
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+    .cursor-ring[data-state] .cursor-ring__label { opacity: 1; }
+
+    /* ============================================================
+       HEADER / NAVIGATION
+       ============================================================ */
+    .header {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: var(--z-header);
+        padding: 18px var(--page-pad);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        transition: background var(--dur) var(--ease-out),
+                    color var(--dur) var(--ease-out),
+                    padding var(--dur) var(--ease-out);
+    }
+    .header.is-scrolled {
+        background: var(--color-paper);
+        color: var(--color-black);
+        padding: 12px var(--page-pad);
+    }
+    .header.is-scrolled .nav__link { color: var(--color-black); }
+    .header.is-scrolled .logo { color: var(--color-black); }
+
+    .logo {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.4rem;
+        letter-spacing: -0.02em;
+        color: var(--color-paper);
+        display: inline-flex;
+        align-items: baseline;
+        gap: 2px;
+        transition: color var(--dur) var(--ease-out);
+    }
+    .logo .slash { color: var(--color-lime); }
+    .logo .dot {
+        display: inline-block;
+        width: 8px; height: 8px;
+        background: var(--color-lime);
+        border-radius: 50%;
+        margin-left: 4px;
+        animation: pulse-dot 1.6s var(--ease-in-out) infinite;
+    }
+
+    .nav {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+    }
+    .nav__list {
+        display: flex;
+        gap: 28px;
+        align-items: center;
+    }
+    .nav__link {
+        position: relative;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--color-paper);
+        padding: 4px 0;
+        transition: color var(--dur) var(--ease-out);
+    }
+    .nav__link::after {
+        content: "";
+        position: absolute;
+        left: 0; bottom: -2px;
+        width: 100%; height: 1px;
+        background: var(--color-lime);
+        transform: scaleX(0);
+        transform-origin: right center;
+        transition: transform var(--dur) var(--ease-out);
+    }
+    .nav__link:hover::after,
+    .nav__link:focus-visible::after {
+        transform: scaleX(1);
+        transform-origin: left center;
+    }
+    .nav__link .num {
+        color: var(--color-lime);
+        margin-right: 4px;
+        font-size: 0.65rem;
+        opacity: 0.7;
+    }
+
+    /* CTA pill — magnetic hover */
+    .cta {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 22px;
+        background: var(--color-lime);
+        color: var(--color-black);
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 500;
+        border-radius: 999px;
+        overflow: hidden;
+        transition: transform var(--dur-fast) var(--ease-spring),
+                    background var(--dur-fast) var(--ease-out),
+                    color var(--dur-fast) var(--ease-out);
+        will-change: transform;
+    }
+    .cta::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--color-black);
+        border-radius: 999px;
+        transform: translateY(101%);
+        transition: transform var(--dur) var(--ease-out);
+    }
+    .cta:hover::before { transform: translateY(0); }
+    .cta:hover { color: var(--color-lime); }
+    .cta span { position: relative; z-index: 1; }
+    .cta .arrow {
+        position: relative; z-index: 1;
+        transition: transform var(--dur) var(--ease-out);
+    }
+    .cta:hover .arrow { transform: translateX(4px); }
+
+    .nav__toggle {
+        display: none;
+        width: 48px; height: 48px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        background: transparent;
+        border: 1px solid rgba(247, 245, 239, 0.25);
+        border-radius: 50%;
+    }
+    .nav__toggle span {
+        display: block;
+        width: 18px; height: 1.5px;
+        background: var(--color-paper);
+        transition: transform var(--dur) var(--ease-out), opacity var(--dur-fast);
+    }
+    .header.is-scrolled .nav__toggle { border-color: rgba(9, 9, 9, 0.2); }
+    .header.is-scrolled .nav__toggle span { background: var(--color-black); }
+
+    /* Mobile / tablet full-screen overlay nav */
+    .mobile-nav {
+        position: fixed;
+        inset: 0;
+        background: var(--color-black);
+        z-index: var(--z-overlay);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 80px var(--page-pad-mobile) 32px;
+        transform: translateY(-100%);
+        transition: transform var(--dur-slow) var(--ease-in-out);
+        overflow-y: auto;
+    }
+    .mobile-nav.is-open { transform: translateY(0); }
+    .mobile-nav__close {
+        position: absolute;
+        top: 24px; right: 24px;
+        width: 48px; height: 48px;
+        display: flex; align-items: center; justify-content: center;
+        border: 1px solid rgba(247, 245, 239, 0.25);
+        border-radius: 50%;
+        color: var(--color-paper);
+    }
+    .mobile-nav__close::before,
+    .mobile-nav__close::after {
+        content: ""; position: absolute;
+        width: 18px; height: 1.5px;
+        background: var(--color-paper);
+    }
+    .mobile-nav__close::before { transform: rotate(45deg); }
+    .mobile-nav__close::after { transform: rotate(-45deg); }
+
+    .mobile-nav__list { display: flex; flex-direction: column; gap: 0; }
+    .mobile-nav__item {
+        border-bottom: 1px solid rgba(247, 245, 239, 0.12);
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    .mobile-nav.is-open .mobile-nav__item {
+        animation: mobile-item-in 0.5s var(--ease-out) forwards;
+    }
+    .mobile-nav.is-open .mobile-nav__item:nth-child(1) { animation-delay: 0.2s; }
+    .mobile-nav.is-open .mobile-nav__item:nth-child(2) { animation-delay: 0.27s; }
+    .mobile-nav.is-open .mobile-nav__item:nth-child(3) { animation-delay: 0.34s; }
+    .mobile-nav.is-open .mobile-nav__item:nth-child(4) { animation-delay: 0.41s; }
+    .mobile-nav.is-open .mobile-nav__item:nth-child(5) { animation-delay: 0.48s; }
+    .mobile-nav.is-open .mobile-nav__item:nth-child(6) { animation-delay: 0.55s; }
+    @keyframes mobile-item-in {
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .mobile-nav__link {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        padding: 18px 0;
+        font-family: var(--font-display);
+        font-size: clamp(2.2rem, 9vw, 3.5rem);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: var(--color-paper);
+        transition: color var(--dur-fast);
+    }
+    .mobile-nav__link:hover { color: var(--color-lime); }
+    .mobile-nav__link .num {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--color-lime);
+        opacity: 0.7;
+    }
+    .mobile-nav__footer {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.5);
+    }
+
+    /* ============================================================
+       HERO — THE ATTENTION MACHINE
+       ============================================================ */
+    .hero {
+        position: relative;
+        min-height: 100vh;
+        background-color: var(--color-black);
+        background-image:
+            linear-gradient(180deg, rgba(9, 9, 9, 0.55) 0%, rgba(9, 9, 9, 0.8) 55%, rgba(9, 9, 9, 0.55) 100%),
+            url('https://attn.wuaze.com/wp-content/uploads/2026/09/Crowd_using_glowing_phones_20260919175455.webp');
+        background-size: cover;
+        background-position: center;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 var(--page-pad);
+    }
+
+    /* Floating campaign objects — parallax layers */
+    .hero__objects {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+    }
+    .hero__obj {
+        position: absolute;
+        border-radius: 8px;
+        overflow: hidden;
+        will-change: transform;
+        transition: transform 0.6s var(--ease-out);
+    }
+    /* Media (GIF) filling any hero__obj — crops to the box via object-fit,
+       regardless of the source file's own aspect ratio (landscape, portrait,
+       whatever), so nothing stretches or overflows its rounded/circular box. */
+    .hero__obj-media {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+    }
+    .hero__obj--1 {
+        top: 12%; right: 8%;
+        width: 220px; height: 280px;
+        background:
+            linear-gradient(135deg, var(--color-pink) 0%, var(--color-orange) 100%);
+    }
+    .hero__obj--1 .hero__obj-media { mix-blend-mode: screen; }
+    .hero__obj--2 {
+        top: 60%; right: 22%;
+        width: 180px; height: 180px;
+        background: var(--color-lime);
+    }
+    .hero__obj--2 .hero__obj-media { mix-blend-mode: difference; }
+    .hero__obj--3 {
+        top: 28%; left: 8%;
+        width: 140px; height: 140px;
+        background:
+            repeating-linear-gradient(45deg, var(--color-blue) 0 8px, transparent 8px 16px);
+        border-radius: 50%;
+    }
+    .hero__obj--4 {
+        bottom: 16%; left: 18%;
+        width: 120px; height: 200px;
+        background: var(--color-paper);
+        color: var(--color-black);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-align: center;
+        padding: 12px;
+    }
+    /* Card 3 layers real media behind its text label, so the label needs
+       its own stacking context plus a dark scrim for legibility. */
+    .hero__obj--4 .hero__obj-media { z-index: 0; }
+    .hero__obj--4-scrim {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(180deg, rgba(9, 9, 9, 0.35) 0%, rgba(9, 9, 9, 0.6) 100%);
+    }
+    .hero__obj--4-label {
+        position: relative;
+        z-index: 2;
+        color: var(--color-paper);
+    }
+    .hero__obj--5 {
+        top: 14%; left: 42%;
+        width: 80px; height: 80px;
+        background: var(--color-orange);
+        border-radius: 50%;
+    }
+    .hero__obj--5 .hero__obj-media { mix-blend-mode: screen; }
+
+    .hero__grid-bg {
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(247, 245, 239, 0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(247, 245, 239, 0.04) 1px, transparent 1px);
+        background-size: 80px 80px;
+        z-index: 0;
+    }
+
+    .hero__content {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        min-width: 0; /* allow children (esp. large display text) to shrink + wrap rather than overflow */
+    }
+
+    .hero__meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.55);
+    }
+    .hero__meta .lime { color: var(--color-lime); }
+
+    .hero__headline {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: var(--fs-hero);
+        line-height: 0.84;
+        letter-spacing: -0.04em;
+        color: var(--color-paper);
+        text-transform: uppercase;
+        margin-top: 12px;
+    }
+    .hero__headline .line {
+        display: block;
+        overflow: hidden;
+    }
+    .hero__headline .word {
+        display: inline-block;
+        transform: translateY(110%);
+        animation: hero-word-in 1s var(--ease-out) forwards;
+    }
+    @keyframes hero-word-in {
+        to { transform: translateY(0); }
+    }
+    .hero__headline .word:nth-child(1) { animation-delay: 2.4s; }
+    .hero__headline .line:nth-child(2) .word:nth-child(1) { animation-delay: 2.5s; }
+    .hero__headline .line:nth-child(3) .word:nth-child(1) { animation-delay: 2.6s; }
+
+    /* The morphing word — LOOK → STOP → FEEL → REMEMBER → ACT */
+    .hero__morph {
+        position: relative;
+        display: inline-block;
+        color: var(--color-lime);
+        min-width: 4ch;
+    }
+    .hero__morph .word {
+        position: absolute;
+        top: 0; left: 0;
+        opacity: 0;
+        transform: translateY(110%) rotate(8deg);
+        transition: opacity 0.5s var(--ease-out), transform 0.7s var(--ease-out);
+    }
+    .hero__morph .word.is-active {
+        position: relative;
+        opacity: 1;
+        transform: translateY(0) rotate(0);
+    }
+
+    .hero__bottom {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-top: 60px;
+        gap: 32px;
+        flex-wrap: wrap;
+    }
+    .hero__desc {
+        max-width: 420px;
+        font-size: 1.05rem;
+        line-height: 1.45;
+        color: rgba(247, 245, 239, 0.75);
+    }
+    .hero__desc strong { color: var(--color-lime); font-weight: 500; }
+
+    .hero__scroll {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--color-paper);
+    }
+    .hero__scroll .line-down {
+        width: 1px; height: 36px;
+        background: linear-gradient(to bottom, var(--color-lime), transparent);
+        animation: scroll-pulse 1.6s var(--ease-in-out) infinite;
+    }
+    @keyframes scroll-pulse {
+        0% { transform: scaleY(0); transform-origin: top; }
+        50% { transform: scaleY(1); transform-origin: top; }
+        100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ============================================================
+       HERO TRANSITION — collapses into ATTENTION IS A CURRENCY
+       ============================================================ */
+    .hero-transition {
+        position: relative;
+        min-height: 140vh;
+        background: var(--color-black);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .hero-transition__sticky {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .hero-transition__bg {
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 50% 50%, rgba(198, 255, 0, 0.08) 0%, transparent 60%);
+    }
+    .hero-transition__text {
+        position: relative;
+        text-align: center;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: var(--fs-mega);
+        line-height: 0.86;
+        letter-spacing: -0.04em;
+        color: var(--color-paper);
+        text-transform: uppercase;
+        will-change: transform, opacity;
+    }
+    .hero-transition__text .currency {
+        color: var(--color-lime);
+        font-style: italic;
+    }
+    .hero-transition__meta {
+        position: absolute;
+        bottom: 40px;
+        left: 0; right: 0;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 var(--page-pad);
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.5);
+    }
+
+    /* ============================================================
+       POSITIONING — who we are
+       ============================================================ */
+    .positioning {
+        background: var(--color-paper);
+        color: var(--color-black);
+        padding: var(--section-gap) 0;
+    }
+    .positioning__inner {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 60px;
+        align-items: start;
+    }
+    .positioning__label {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .positioning__label .section-label { color: var(--color-black); }
+    .positioning__label .section-label::before { background: var(--color-black); }
+    .positioning__label-text {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(9, 9, 9, 0.6);
+    }
+    .positioning__statement {
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-size: clamp(1.6rem, 3.6vw, 3.4rem);
+        line-height: 1.08;
+        letter-spacing: -0.02em;
+        color: var(--color-black);
+    }
+    .positioning__statement .accent { color: var(--color-orange); font-style: italic; }
+    .positioning__statement .lime-bg {
+        background: var(--color-lime);
+        padding: 0 8px;
+        margin: 0 -2px;
+    }
+    .positioning__support {
+        margin-top: 36px;
+        font-size: 1.1rem;
+        line-height: 1.55;
+        color: rgba(9, 9, 9, 0.7);
+        max-width: 620px;
+    }
+    .positioning__tags {
+        margin-top: 32px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .positioning__tag {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 6px 14px;
+        border: 1px solid rgba(9, 9, 9, 0.2);
+        border-radius: 999px;
+        color: var(--color-black);
+    }
+
+    /* ============================================================
+       MANIFESTO — kinetic typography that swaps on scroll
+       ============================================================ */
+    .manifesto {
+        background: var(--color-black);
+        padding: var(--section-gap) 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .manifesto__inner {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+    .manifesto__main {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(3rem, 14vw, 14rem);
+        line-height: 0.84;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+        text-align: left;
+    }
+    .manifesto__main .swap-word {
+        display: inline-block;
+        position: relative;
+        transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+    }
+    .manifesto__main .swap-word .from,
+    .manifesto__main .swap-word .to {
+        display: inline-block;
+        transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+    }
+    .manifesto__main .swap-word .to {
+        position: absolute;
+        top: 0; left: 0;
+        opacity: 0;
+        transform: translateY(50%);
+        color: var(--color-lime);
+    }
+    .manifesto.is-swapped .swap-word .from {
+        opacity: 0;
+        transform: translateY(-50%);
+    }
+    .manifesto.is-swapped .swap-word .to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .manifesto__list {
+        margin-top: 60px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px 60px;
+    }
+    .manifesto__item {
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        color: rgba(247, 245, 239, 0.85);
+        padding-left: 32px;
+        position: relative;
+    }
+    .manifesto__item::before {
+        content: counter(manifesto-counter, decimal-leading-zero);
+        counter-increment: manifesto-counter;
+        position: absolute;
+        left: 0; top: 4px;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.1em;
+        color: var(--color-lime);
+    }
+    .manifesto__list { counter-reset: manifesto-counter; }
+
+    /* ============================================================
+       SERVICES / CAPABILITIES — interactive campaign objects
+       ============================================================ */
+    .services {
+        background: var(--color-black);
+        padding: var(--section-gap) 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .services__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 60px;
+        gap: 32px;
+        flex-wrap: wrap;
+    }
+    .services__title {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.4rem, 6vw, 5.5rem);
+        line-height: 0.9;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+    }
+    .services__title .accent { color: var(--color-lime); font-style: italic; }
+    .services__count {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.55);
+    }
+
+    .services__list {
+        border-top: 1px solid rgba(247, 245, 239, 0.15);
+    }
+    .service-row {
+        position: relative;
+        display: grid;
+        grid-template-columns: 80px 1fr 1fr 200px;
+        gap: 24px;
+        align-items: center;
+        padding: 28px 0;
+        border-bottom: 1px solid rgba(247, 245, 239, 0.15);
+        transition: padding var(--dur) var(--ease-out);
+        cursor: none;
+    }
+    .service-row:hover { padding-inline: 16px; }
+    .service-row__num {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        color: var(--color-lime);
+    }
+    .service-row__name {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: clamp(1.6rem, 3.4vw, 3rem);
+        line-height: 1;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        color: var(--color-paper);
+        transition: color var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+    }
+    .service-row:hover .service-row__name {
+        color: var(--color-lime);
+        transform: translateX(8px);
+    }
+    .service-row__desc {
+        font-size: 0.95rem;
+        line-height: 1.45;
+        color: rgba(247, 245, 239, 0.6);
+        max-width: 360px;
+    }
+    .service-row__tag {
+        justify-self: end;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.5);
+        text-align: right;
+    }
+    .service-row__visual {
+        position: absolute;
+        top: 50%;
+        right: 8%;
+        width: 220px; height: 220px;
+        transform: translateY(-50%) scale(0);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform var(--dur) var(--ease-spring), opacity var(--dur) var(--ease-out);
+        z-index: 2;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .service-row:hover .service-row__visual {
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+
+    /* Distinct per-service visuals */
+    .service-row__visual--social {
+        background:
+            repeating-linear-gradient(0deg, var(--color-pink) 0 16px, transparent 16px 32px),
+            var(--color-black);
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 2rem;
+        color: var(--color-paper);
+    }
+    .service-row__visual--performance {
+        background: var(--color-black);
+        display: flex; align-items: flex-end; justify-content: space-around;
+        padding: 16px;
+        gap: 4px;
+    }
+    .service-row__visual--performance .bar {
+        flex: 1;
+        background: var(--color-lime);
+        animation: bar-rise 1.4s var(--ease-out) infinite;
+    }
+    .service-row__visual--performance .bar:nth-child(1) { height: 30%; animation-delay: 0s; }
+    .service-row__visual--performance .bar:nth-child(2) { height: 65%; animation-delay: 0.2s; }
+    .service-row__visual--performance .bar:nth-child(3) { height: 45%; animation-delay: 0.4s; }
+    .service-row__visual--performance .bar:nth-child(4) { height: 90%; animation-delay: 0.6s; }
+    .service-row__visual--performance .bar:nth-child(5) { height: 70%; animation-delay: 0.8s; }
+    @keyframes bar-rise {
+        0%, 100% { transform: scaleY(1); }
+        50% { transform: scaleY(0.5); }
+    }
+    .service-row__visual--creative {
+        background: linear-gradient(135deg, var(--color-orange) 0%, var(--color-pink) 50%, var(--color-blue) 100%);
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 4rem;
+        color: var(--color-paper);
+        font-style: italic;
+        letter-spacing: -0.05em;
+    }
+    .service-row__visual--brand {
+        background: var(--color-paper);
+        color: var(--color-black);
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.4rem;
+        letter-spacing: -0.02em;
+        text-align: center;
+        padding: 16px;
+    }
+    .service-row__visual--digital {
+        background: var(--color-blue);
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+        padding: 16px;
+    }
+    .service-row__visual--digital div {
+        background: rgba(247, 245, 239, 0.2);
+        animation: pulse-dot 2s var(--ease-in-out) infinite;
+    }
+    .service-row__visual--digital div:nth-child(odd) { animation-delay: 0.3s; }
+    .service-row__visual--content {
+        background: var(--color-black);
+        border: 2px solid var(--color-lime);
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--color-lime);
+        text-align: center;
+        padding: 16px;
+    }
+    .service-row__visual--media {
+        background:
+            radial-gradient(circle at 30% 40%, var(--color-orange) 0%, transparent 40%),
+            radial-gradient(circle at 70% 60%, var(--color-pink) 0%, transparent 40%),
+            var(--color-black);
+    }
+    .service-row__visual--experiences {
+        background:
+            conic-gradient(from 0deg, var(--color-lime), var(--color-blue), var(--color-pink), var(--color-lime));
+        animation: spin-slow 8s linear infinite;
+    }
+    @keyframes spin-slow { to { transform: rotate(360deg); } }
+    .service-row__visual--influencer {
+        background: var(--color-pink);
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 3rem;
+        color: var(--color-paper);
+    }
+    .service-row__visual--analytics {
+        background: var(--color-black);
+        position: relative;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--color-lime);
+        font-family: var(--font-mono);
+        font-size: 1.4rem;
+        font-weight: 500;
+    }
+    .service-row__visual--analytics::before {
+        content: "";
+        position: absolute;
+        inset: 16px;
+        border: 1px dashed var(--color-lime);
+        border-radius: 50%;
+        animation: spin-slow 6s linear infinite;
+    }
+
+    /* Mobile services — interactive word chain */
+    .services__mobile {
+        display: none;
+        padding: 0 var(--page-pad-mobile);
+    }
+    .services__mobile-intro {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.2rem, 8vw, 3.5rem);
+        line-height: 1;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+        margin-bottom: 40px;
+    }
+    .services__mobile-chain {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin: 32px 0;
+    }
+    .services__mobile-word {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.5rem, 13vw, 5rem);
+        line-height: 0.95;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.25);
+        transition: color 0.4s var(--ease-out), transform 0.4s var(--ease-out);
+        padding: 8px 0;
+        cursor: none;
+    }
+    .services__mobile-word.is-active {
+        color: var(--color-lime);
+        transform: translateX(16px);
+    }
+    .services__mobile-arrow {
+        font-family: var(--font-mono);
+        color: var(--color-lime);
+        font-size: 1.4rem;
+        padding-left: 16px;
+    }
+    .services__mobile-final {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.5rem, 13vw, 5rem);
+        line-height: 0.95;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+        color: var(--color-paper);
+        background: var(--color-lime);
+        color: var(--color-black);
+        padding: 12px 16px;
+        margin-top: 16px;
+    }
+
+    /* ============================================================
+       CAMPAIGN REEL — horizontal archive
+       ============================================================ */
+    .campaign-reel {
+        background: var(--color-paper);
+        color: var(--color-black);
+        position: relative;
+        overflow: hidden;
+    }
+    .campaign-reel__header {
+        padding: var(--section-gap) var(--page-pad) 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+    .campaign-reel__title {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.4rem, 6vw, 5rem);
+        line-height: 0.9;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+    }
+    .campaign-reel__title .lime-bg {
+        background: var(--color-lime);
+        padding: 0 8px;
+    }
+    .campaign-reel__hint {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(9, 9, 9, 0.6);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .campaign-reel__track {
+        display: flex;
+        gap: 24px;
+        padding: 0 var(--page-pad) 80px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+    .campaign-reel__track::-webkit-scrollbar { display: none; }
+
+    .reel-card {
+        flex: 0 0 360px;
+        scroll-snap-align: start;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .reel-card__visual {
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        position: relative;
+        overflow: hidden;
+        border-radius: 4px;
+    }
+    .reel-card__visual--1 {
+        background: linear-gradient(160deg, var(--color-pink) 0%, var(--color-orange) 100%);
+    }
+    .reel-card__visual--2 {
+        background:
+            repeating-linear-gradient(45deg, var(--color-black) 0 14px, var(--color-lime) 14px 28px);
+    }
+    .reel-card__visual--3 {
+        background: var(--color-blue);
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-display);
+        font-size: 6rem;
+        font-weight: 700;
+        color: var(--color-paper);
+        letter-spacing: -0.04em;
+    }
+    .reel-card__visual--4 {
+        background: var(--color-lime);
+        color: var(--color-black);
+        display: flex; align-items: flex-end; justify-content: flex-start;
+        padding: 24px;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 2.2rem;
+        line-height: 1;
+        letter-spacing: -0.02em;
+    }
+    .reel-card__visual--5 {
+        background:
+            radial-gradient(circle at 30% 30%, var(--color-orange), transparent 50%),
+            radial-gradient(circle at 70% 70%, var(--color-pink), transparent 50%),
+            var(--color-black);
+        position: relative;
+    }
+    .reel-card__visual--5::after {
+        content: "06";
+        position: absolute;
+        bottom: 20px; right: 20px;
+        font-family: var(--font-display);
+        font-size: 5rem;
+        font-weight: 700;
+        color: var(--color-paper);
+        opacity: 0.9;
+    }
+    .reel-card__visual--6 {
+        background: var(--color-black);
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--color-lime);
+        text-align: center;
+        padding: 16px;
+    }
+    .reel-card__meta {
+        display: flex;
+        justify-content: space-between;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(9, 9, 9, 0.6);
+    }
+    .reel-card__title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 1.5rem;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        color: var(--color-black);
+    }
+    .reel-card__client {
+        font-size: 0.9rem;
+        color: rgba(9, 9, 9, 0.65);
+    }
+    .reel-card__result {
+        margin-top: 8px;
+        display: inline-flex;
+        align-items: baseline;
+        gap: 6px;
+        font-family: var(--font-display);
+        font-weight: 600;
+        color: var(--color-orange);
+        font-size: 1.1rem;
+    }
+
+    /* ============================================================
+       FEATURED WORK — 5 distinct campaign layouts
+       ============================================================ */
+    .work {
+        background: var(--color-black);
+        padding: var(--section-gap) 0;
+        position: relative;
+    }
+    .work__header {
+        padding: 0 var(--page-pad);
+        margin-bottom: 80px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 32px;
+        flex-wrap: wrap;
+    }
+    .work__title {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.4rem, 6vw, 5rem);
+        line-height: 0.9;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+    }
+    .work__title .accent { color: var(--color-lime); font-style: italic; }
+    .work__sub {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.55);
+        max-width: 320px;
+        line-height: 1.5;
+    }
+
+    .campaign {
+        margin-bottom: 120px;
+        position: relative;
+    }
+    .campaign:last-child { margin-bottom: 0; }
+    .campaign__meta {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 var(--page-pad);
+        margin-bottom: 24px;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.55);
+    }
+    .campaign__meta .num { color: var(--color-lime); }
+
+    /* 01 — Brand transformation: massive left image, type right */
+    .campaign--01 {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 40px;
+        padding: 0 var(--page-pad);
+    }
+    .campaign--01 .campaign__visual {
+        aspect-ratio: 4 / 3;
+        background:
+            linear-gradient(135deg, var(--color-pink) 0%, var(--color-orange) 60%, var(--color-lime) 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    .campaign--01 .campaign__visual::after {
+        content: "REBEL";
+        position: absolute;
+        bottom: 20px; left: 24px;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(3rem, 6vw, 6rem);
+        color: var(--color-paper);
+        letter-spacing: -0.04em;
+        line-height: 0.85;
+    }
+    .campaign--01 .campaign__copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 24px;
+        padding-bottom: 20px;
+    }
+    .campaign--01 .campaign__name {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        line-height: 0.95;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+    }
+    .campaign--01 .campaign__desc {
+        font-size: 1rem;
+        line-height: 1.55;
+        color: rgba(247, 245, 239, 0.7);
+        max-width: 360px;
+    }
+    .campaign--01 .campaign__tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .campaign--01 .campaign__tag {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border: 1px solid rgba(247, 245, 239, 0.2);
+        border-radius: 999px;
+    }
+
+    /* 02 — Product launch: centered with floating elements */
+    .campaign--02 {
+        text-align: center;
+        padding: 60px var(--page-pad);
+        position: relative;
+    }
+    .campaign--02 .campaign__visual {
+        margin: 32px auto 0;
+        width: min(640px, 80%);
+        aspect-ratio: 1 / 1;
+        background: var(--color-blue);
+        position: relative;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(3rem, 8vw, 8rem);
+        color: var(--color-paper);
+        letter-spacing: -0.04em;
+        text-align: center;
+        line-height: 0.9;
+    }
+    .campaign--02 .campaign__visual::before,
+    .campaign--02 .campaign__visual::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        z-index: -1;
+    }
+    .campaign--02 .campaign__visual::before {
+        width: 60%; height: 60%;
+        background: var(--color-lime);
+        top: -10%; left: -8%;
+    }
+    .campaign--02 .campaign__visual::after {
+        width: 50%; height: 50%;
+        background: var(--color-orange);
+        bottom: -10%; right: -5%;
+    }
+    .campaign--02 .campaign__name {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(1.8rem, 4vw, 3rem);
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+    }
+    .campaign--02 .campaign__desc {
+        max-width: 540px;
+        margin: 16px auto 0;
+        color: rgba(247, 245, 239, 0.7);
+    }
+
+    /* 03 — Social campaign: small image grid */
+    .campaign--03 {
+        padding: 0 var(--page-pad);
+    }
+    .campaign--03 .campaign__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 24px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+    }
+    .campaign--03 .campaign__name {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(1.8rem, 4vw, 3.2rem);
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+    }
+    .campaign--03 .campaign__desc { max-width: 360px; color: rgba(247, 245, 239, 0.7); }
+    .campaign--03 .campaign__grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+    .campaign--03 .grid-tile {
+        aspect-ratio: 1;
+        background: var(--color-paper);
+        position: relative;
+        overflow: hidden;
+        transition: transform var(--dur) var(--ease-out);
+    }
+    .campaign--03 .grid-tile:hover { transform: scale(0.96); }
+    .campaign--03 .grid-tile--1 { background: var(--color-pink); }
+    .campaign--03 .grid-tile--2 { background: var(--color-lime); }
+    .campaign--03 .grid-tile--3 { background: var(--color-orange); }
+    .campaign--03 .grid-tile--4 { background: var(--color-blue); }
+    .campaign--03 .grid-tile--5 { background: var(--color-paper); grid-column: span 2; aspect-ratio: 2.04; }
+    .campaign--03 .grid-tile--6 { background: var(--color-black); border: 1px solid rgba(247,245,239,0.2); }
+    .campaign--03 .grid-tile--7 { background: var(--color-pink); }
+    .campaign--03 .grid-tile__text {
+        position: absolute;
+        bottom: 12px; left: 12px;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    /* 04 — Cultural campaign: full-bleed */
+    .campaign--04 {
+        position: relative;
+        height: 80vh;
+        min-height: 500px;
+        background:
+            radial-gradient(ellipse at 50% 50%, var(--color-orange) 0%, var(--color-black) 70%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .campaign--04 .campaign__visual {
+        text-align: center;
+        padding: 0 var(--page-pad);
+    }
+    .campaign--04 .campaign__name {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(3rem, 10vw, 9rem);
+        line-height: 0.85;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+        color: var(--color-paper);
+        mix-blend-mode: difference;
+    }
+    .campaign--04 .campaign__desc {
+        max-width: 540px;
+        margin: 24px auto 0;
+        color: rgba(247, 245, 239, 0.8);
+        text-align: center;
+    }
+    .campaign--04 .campaign__overlay {
+        position: absolute;
+        top: 24px; left: 24px;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--color-paper);
+    }
+
+    /* 05 — Performance campaign: data + chart */
+    .campaign--05 {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 40px;
+        padding: 0 var(--page-pad);
+        align-items: center;
+    }
+    .campaign--05 .campaign__copy {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .campaign--05 .campaign__name {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+    }
+    .campaign--05 .campaign__desc { color: rgba(247, 245, 239, 0.7); }
+    .campaign--05 .campaign__chart {
+        position: relative;
+        aspect-ratio: 4 / 3;
+        background: var(--color-paper);
+        color: var(--color-black);
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .campaign--05 .chart__label {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(9, 9, 9, 0.6);
+    }
+    .campaign--05 .chart__big {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.4rem, 5vw, 4rem);
+        letter-spacing: -0.03em;
+        color: var(--color-black);
+        line-height: 0.9;
+    }
+    .campaign--05 .chart__big .pct { color: var(--color-orange); }
+    .campaign--05 .chart__bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        height: 80px;
+    }
+    .campaign--05 .chart__bars .b {
+        flex: 1;
+        background: var(--color-black);
+        border-radius: 2px 2px 0 0;
+        transform-origin: bottom;
+        animation: chart-grow 1.6s var(--ease-out) forwards;
+        transform: scaleY(0);
+    }
+    @keyframes chart-grow { to { transform: scaleY(1); } }
+    .campaign--05 .chart__axis {
+        display: flex;
+        justify-content: space-between;
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(9, 9, 9, 0.5);
+    }
+
+    /* ============================================================
+       RESULTS — animated counters
+       ============================================================ */
+    .results {
+        background: var(--color-paper);
+        color: var(--color-black);
+        padding: var(--section-gap) 0;
+    }
+    .results__header {
+        padding: 0 var(--page-pad);
+        margin-bottom: 60px;
+    }
+    .results__title {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.4rem, 6vw, 5rem);
+        line-height: 0.9;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+        max-width: 900px;
+    }
+    .results__title .accent { color: var(--color-orange); }
+
+    .results__grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: rgba(9, 9, 9, 0.15);
+        border: 1px solid rgba(9, 9, 9, 0.15);
+    }
+    .result-cell {
+        background: var(--color-paper);
+        padding: 40px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        position: relative;
+        min-height: 280px;
+    }
+    .result-cell:nth-child(odd) { background: var(--color-paper); }
+    .result-cell:nth-child(even) { background: var(--color-black); color: var(--color-paper); }
+    .result-cell:nth-child(5) { background: var(--color-lime); color: var(--color-black); }
+    .result-cell__num {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(3rem, 7vw, 6rem);
+        line-height: 0.85;
+        letter-spacing: -0.04em;
+        display: flex;
+        align-items: baseline;
+    }
+    .result-cell__num .unit {
+        font-size: 0.45em;
+        margin-left: 4px;
+    }
+    .result-cell__label {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        opacity: 0.7;
+    }
+    .result-cell__desc {
+        margin-top: auto;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        opacity: 0.85;
+    }
+    .result-cell__icon {
+        position: absolute;
+        top: 24px; right: 24px;
+        width: 32px; height: 32px;
+        border: 1px solid currentColor;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mono);
+        font-size: 9px;
+    }
+
+    /* ============================================================
+       ATTENTION LAB — experimental grid
+       ============================================================ */
+    .lab {
+        background: var(--color-black);
+        padding: var(--section-gap) 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .lab__header {
+        padding: 0 var(--page-pad);
+        margin-bottom: 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 32px;
+        flex-wrap: wrap;
+    }
+    .lab__title {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.4rem, 7vw, 6rem);
+        line-height: 0.86;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+    }
+    .lab__title .accent {
+        color: var(--color-lime);
+        font-style: italic;
+    }
+    .lab__sub {
+        max-width: 360px;
+        color: rgba(247, 245, 239, 0.65);
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .lab__grid {
+        padding: 0 var(--page-pad);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        grid-auto-rows: 220px;
+    }
+    .lab-tile {
+        position: relative;
+        overflow: hidden;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        text-align: center;
+    }
+    .lab-tile--1 {
+        grid-column: span 2;
+        background: var(--color-pink);
+        color: var(--color-paper);
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        line-height: 0.9;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+    }
+    .lab-tile--2 {
+        background: var(--color-lime);
+        color: var(--color-black);
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+    .lab-tile--3 {
+        background:
+            repeating-conic-gradient(var(--color-orange) 0 25%, var(--color-black) 0 50%) 0 / 40px 40px;
+    }
+    .lab-tile--4 {
+        grid-column: span 2;
+        background: var(--color-black);
+        border: 1px solid var(--color-lime);
+        color: var(--color-lime);
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(1.6rem, 3vw, 2.6rem);
+        font-style: italic;
+        line-height: 1;
+    }
+    .lab-tile--5 {
+        background: var(--color-blue);
+        color: var(--color-paper);
+        font-family: var(--font-display);
+        font-size: 3rem;
+        font-weight: 700;
+        animation: tile-shake 4s var(--ease-in-out) infinite;
+    }
+    @keyframes tile-shake {
+        0%, 100% { transform: rotate(0); }
+        25% { transform: rotate(-2deg); }
+        75% { transform: rotate(2deg); }
+    }
+    .lab-tile--6 {
+        background: var(--color-orange);
+        color: var(--color-black);
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        text-align: left;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+    .lab-tile--7 {
+        grid-column: span 2;
+        background: var(--color-paper);
+        color: var(--color-black);
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2rem, 5vw, 4rem);
+        line-height: 0.9;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+        text-align: left;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding-left: 24px;
+    }
+    .lab-tile--8 {
+        background: var(--color-black);
+        border: 2px solid var(--color-pink);
+        color: var(--color-pink);
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 2.4rem;
+        font-style: italic;
+    }
+
+    /* Marquee inside lab */
+    .lab__marquee {
+        margin-top: 60px;
+        padding: 24px 0;
+        border-block: 1px solid rgba(247, 245, 239, 0.15);
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    .lab__marquee-track {
+        display: inline-block;
+        animation: marquee 30s linear infinite;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2rem, 5vw, 4rem);
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+    }
+    .lab__marquee-track span { margin-right: 60px; }
+    .lab__marquee-track .lime { color: var(--color-lime); }
+    .lab__marquee-track .italic { font-style: italic; }
+    @keyframes marquee {
+        to { transform: translateX(-50%); }
+    }
+
+    /* ============================================================
+       PROCESS — sticky scroll storytelling
+       ============================================================ */
+    .process {
+        background: var(--color-paper);
+        color: var(--color-black);
+        position: relative;
+    }
+    .process__header {
+        padding: var(--section-gap) var(--page-pad) 0;
+    }
+    .process__title {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.4rem, 7vw, 6rem);
+        line-height: 0.86;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+        max-width: 900px;
+    }
+    .process__title .lime-bg { background: var(--color-lime); padding: 0 8px; }
+
+    .process__sticky-wrap {
+        position: relative;
+        height: 600vh;
+    }
+    .process__sticky {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .process__stage {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        opacity: 0;
+        transform: scale(1.15);
+        transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+        pointer-events: none;
+    }
+    .process__stage.is-active {
+        opacity: 1;
+        transform: scale(1);
+        pointer-events: auto;
+    }
+    .process__stage-num {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--color-orange);
+        margin-bottom: 24px;
+    }
+    .process__stage-name {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(5rem, 22vw, 18rem);
+        line-height: 0.84;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+        color: var(--color-black);
+    }
+    .process__stage-desc {
+        margin-top: 32px;
+        max-width: 480px;
+        font-size: 1.05rem;
+        line-height: 1.5;
+        color: rgba(9, 9, 9, 0.7);
+    }
+    .process__progress {
+        position: absolute;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 24px;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+    .process__progress .stage-dot {
+        width: 8px; height: 8px;
+        background: rgba(9, 9, 9, 0.2);
+        border-radius: 50%;
+        transition: background var(--dur) var(--ease-out);
+    }
+    .process__progress .stage-dot.is-active { background: var(--color-black); }
+
+    /* ============================================================
+       CULTURE — living collage
+       ============================================================ */
+    .culture {
+        background: var(--color-black);
+        padding: var(--section-gap) 0;
+        position: relative;
+    }
+    .culture__header {
+        padding: 0 var(--page-pad);
+        margin-bottom: 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 32px;
+        flex-wrap: wrap;
+    }
+    .culture__title {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.4rem, 6vw, 5rem);
+        line-height: 0.9;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+    }
+    .culture__title .accent { color: var(--color-pink); }
+    .culture__sub {
+        max-width: 360px;
+        color: rgba(247, 245, 239, 0.65);
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .culture__grid {
+        padding: 0 var(--page-pad);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: 220px;
+        gap: 12px;
+    }
+    .person {
+        position: relative;
+        overflow: hidden;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 16px;
+        transition: transform var(--dur) var(--ease-out);
+    }
+    .person:hover { transform: scale(0.97); }
+    .person--1 { background: linear-gradient(135deg, var(--color-pink), var(--color-orange)); grid-column: span 2; grid-row: span 2; }
+    .person--2 { background: var(--color-lime); color: var(--color-black); }
+    .person--3 { background: var(--color-blue); }
+    .person--4 { background: var(--color-orange); }
+    .person--5 { background: var(--color-paper); color: var(--color-black); grid-column: span 2; }
+    .person--6 { background: var(--color-pink); }
+    .person--7 { background: var(--color-black); border: 1px solid rgba(247,245,239,0.2); }
+    .person__name {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.4rem;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        color: inherit;
+    }
+    .person--1 .person__name { font-size: 2.2rem; }
+    .person--5 .person__name { font-size: 2rem; }
+    .person__role {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        opacity: 0.85;
+    }
+    .person__statement {
+        position: absolute;
+        inset: 0;
+        background: var(--color-black);
+        color: var(--color-lime);
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-size: 1.2rem;
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+        pointer-events: none;
+    }
+    .person:hover .person__statement,
+    .person:focus-within .person__statement {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* ============================================================
+       SOCIAL PROOF — brand ticker
+       ============================================================ */
+    .proof {
+        background: var(--color-black);
+        padding: var(--section-gap) 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .proof__title-row {
+        padding: 0 var(--page-pad);
+        margin-bottom: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+    .proof__title {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2rem, 5vw, 4rem);
+        line-height: 0.9;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+    }
+    .proof__quote {
+        max-width: 480px;
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-size: 1.3rem;
+        line-height: 1.3;
+        letter-spacing: -0.01em;
+        color: var(--color-paper);
+    }
+    .proof__quote::before {
+        content: "“";
+        font-size: 3rem;
+        color: var(--color-lime);
+        line-height: 0;
+        vertical-align: -0.4em;
+        margin-right: 4px;
+    }
+    .proof__author {
+        margin-top: 12px;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.55);
+    }
+
+    .proof__ticker {
+        position: relative;
+        overflow: hidden;
+        border-block: 1px solid rgba(247, 245, 239, 0.15);
+        padding: 24px 0;
+    }
+    .proof__track {
+        display: flex;
+        gap: 80px;
+        width: max-content;
+        animation: ticker-scroll 28s linear infinite;
+    }
+    .proof__track:hover { animation-play-state: paused; }
+    .proof__track--reverse { animation-direction: reverse; }
+    @keyframes ticker-scroll {
+        to { transform: translateX(-50%); }
+    }
+    .brand {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(1.6rem, 3vw, 2.6rem);
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.4);
+        white-space: nowrap;
+        transition: color var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+        cursor: none;
+    }
+    .brand:hover { color: var(--color-lime); transform: scale(1.05); }
+
+    /* ============================================================
+       INSIGHTS — editorial articles
+       ============================================================ */
+    .insights {
+        background: var(--color-paper);
+        color: var(--color-black);
+        padding: var(--section-gap) 0;
+    }
+    .insights__header {
+        padding: 0 var(--page-pad);
+        margin-bottom: 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 32px;
+        flex-wrap: wrap;
+    }
+    .insights__title {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.4rem, 8vw, 7rem);
+        line-height: 0.86;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+        max-width: 900px;
+    }
+    .insights__title .accent { color: var(--color-blue); }
+
+    .insights__featured {
+        padding: 0 var(--page-pad);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: end;
+        margin-bottom: 80px;
+    }
+    .insights__featured-visual {
+        aspect-ratio: 5 / 4;
+        background: linear-gradient(135deg, var(--color-blue), var(--color-pink));
+        position: relative;
+    }
+    .insights__featured-visual::after {
+        content: "TREND REPORT";
+        position: absolute;
+        bottom: 16px; left: 16px;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--color-paper);
+    }
+    .insights__featured-text {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-bottom: 20px;
+    }
+    .insights__meta-row {
+        display: flex;
+        gap: 16px;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(9, 9, 9, 0.55);
+    }
+    .insights__featured-headline {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: clamp(1.8rem, 3.6vw, 3.2rem);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        color: var(--color-black);
+    }
+    .insights__featured-dek {
+        font-size: 1.05rem;
+        line-height: 1.5;
+        color: rgba(9, 9, 9, 0.7);
+        max-width: 540px;
+    }
+    .insights__featured-cta {
+        margin-top: 8px;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--color-black);
+        align-self: flex-start;
+        border-bottom: 1px solid var(--color-black);
+        padding-bottom: 4px;
+    }
+
+    .insights__list {
+        padding: 0 var(--page-pad);
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+    }
+    .insight-card {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 24px 0;
+        border-top: 1px solid rgba(9, 9, 9, 0.2);
+    }
+    .insight-card__visual {
+        aspect-ratio: 16 / 10;
+        margin-bottom: 12px;
+        position: relative;
+        overflow: hidden;
+    }
+    .insight-card__visual--1 { background: var(--color-lime); }
+    .insight-card__visual--2 { background: var(--color-orange); }
+    .insight-card__visual--3 { background: var(--color-blue); }
+    .insight-card__visual::after {
+        content: attr(data-text);
+        position: absolute;
+        bottom: 16px; left: 16px;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: var(--color-paper);
+        letter-spacing: -0.02em;
+    }
+    .insight-card__title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 1.4rem;
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        color: var(--color-black);
+    }
+    .insight-card__dek {
+        font-size: 0.92rem;
+        line-height: 1.5;
+        color: rgba(9, 9, 9, 0.65);
+    }
+
+    /* ============================================================
+       FINAL STATEMENT — dramatic interruption
+       ============================================================ */
+    .final-statement {
+        background: var(--color-black);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        padding: 80px var(--page-pad);
+    }
+    .final-statement__bg {
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 20% 30%, rgba(198, 255, 0, 0.08), transparent 40%),
+            radial-gradient(circle at 80% 70%, rgba(255, 60, 172, 0.08), transparent 40%);
+    }
+    .final-statement__text {
+        position: relative;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(3rem, 16vw, 16rem);
+        line-height: 0.82;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+        text-align: center;
+        color: var(--color-paper);
+    }
+    .final-statement__text .word {
+        display: block;
+        opacity: 0;
+        transform: translateY(60px) rotate(4deg);
+        transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+    }
+    .final-statement__text .word.is-visible {
+        opacity: 1;
+        transform: translateY(0) rotate(0);
+    }
+    .final-statement__text .lime-bg {
+        background: var(--color-lime);
+        color: var(--color-black);
+        padding: 0 16px;
+        display: inline-block;
+    }
+    .final-statement__text .italic { font-style: italic; }
+    .final-statement__corner {
+        position: absolute;
+        top: 32px; left: 32px;
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.4);
+    }
+    .final-statement__corner--r {
+        left: auto;
+        right: 32px;
+        text-align: right;
+    }
+
+    /* ============================================================
+       CONTACT — conversion moment
+       ============================================================ */
+    .contact {
+        background: var(--color-paper);
+        color: var(--color-black);
+        padding: var(--section-gap) var(--page-pad);
+        position: relative;
+        overflow: hidden;
+    }
+    .contact__inner {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+    .contact__headline {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(3rem, 14vw, 14rem);
+        line-height: 0.84;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+        color: var(--color-black);
+    }
+    .contact__headline .accent { color: var(--color-orange); font-style: italic; }
+    .contact__sub {
+        margin-top: 24px;
+        font-size: 1.15rem;
+        line-height: 1.5;
+        color: rgba(9, 9, 9, 0.7);
+        max-width: 540px;
+    }
+    .contact__actions {
+        margin-top: 40px;
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+    .contact__cta {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 18px 32px;
+        background: var(--color-black);
+        color: var(--color-paper);
+        font-family: var(--font-mono);
+        font-size: 0.9rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 500;
+        border-radius: 999px;
+        overflow: hidden;
+        transition: transform var(--dur-fast) var(--ease-spring);
+    }
+    .contact__cta::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--color-lime);
+        border-radius: 999px;
+        transform: translateY(101%);
+        transition: transform var(--dur) var(--ease-out);
+    }
+    .contact__cta:hover::before { transform: translateY(0); }
+    .contact__cta:hover { color: var(--color-black); }
+    .contact__cta span { position: relative; z-index: 1; }
+
+    .contact__secondary {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 18px 28px;
+        border: 1px solid var(--color-black);
+        font-family: var(--font-mono);
+        font-size: 0.9rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        border-radius: 999px;
+        color: var(--color-black);
+        transition: background var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+    }
+    .contact__secondary:hover {
+        background: var(--color-black);
+        color: var(--color-paper);
+    }
+
+    /* Contact form panel — reveals on CTA click */
+    .contact__panel {
+        position: relative;
+        background: var(--color-black);
+        color: var(--color-paper);
+        padding: 40px;
+        border-radius: 8px;
+        max-width: 480px;
+        margin-left: auto;
+    }
+    .contact__panel-title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 1.6rem;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin-bottom: 24px;
+    }
+    .contact__panel-title .lime { color: var(--color-lime); }
+    .contact__field {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .contact__field label {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.6);
+    }
+    .contact__field input,
+    .contact__field textarea,
+    .contact__field select {
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid rgba(247, 245, 239, 0.3);
+        padding: 8px 0;
+        font-family: var(--font-body);
+        font-size: 1rem;
+        color: var(--color-paper);
+        transition: border-color var(--dur) var(--ease-out);
+    }
+    .contact__field input:focus,
+    .contact__field textarea:focus,
+    .contact__field select:focus {
+        outline: none;
+        border-color: var(--color-lime);
+    }
+    .contact__field textarea { resize: vertical; min-height: 80px; }
+    .contact__field select {
+        appearance: none;
+        background-image:
+            linear-gradient(45deg, transparent 50%, var(--color-lime) 50%),
+            linear-gradient(135deg, var(--color-lime) 50%, transparent 50%);
+        background-position: calc(100% - 12px) center, calc(100% - 6px) center;
+        background-size: 6px 6px;
+        background-repeat: no-repeat;
+    }
+    .contact__field select option { background: var(--color-black); }
+    .contact__submit {
+        margin-top: 12px;
+        width: 100%;
+        padding: 14px;
+        background: var(--color-lime);
+        color: var(--color-black);
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 500;
+        border-radius: 999px;
+        transition: background var(--dur) var(--ease-out);
+    }
+    .contact__submit:hover { background: var(--color-paper); }
+    .contact__panel-note {
+        margin-top: 16px;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.5);
+        text-align: center;
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+        background: var(--color-black);
+        color: var(--color-paper);
+        padding: 80px var(--page-pad) 32px;
+        position: relative;
+        overflow: hidden;
+    }
+    .footer__top {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 40px;
+        padding-bottom: 60px;
+        border-bottom: 1px solid rgba(247, 245, 239, 0.15);
+    }
+    .footer__brand {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .footer__logo {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 3rem;
+        letter-spacing: -0.03em;
+    }
+    .footer__logo .slash { color: var(--color-lime); }
+    .footer__tagline {
+        font-size: 1rem;
+        line-height: 1.5;
+        color: rgba(247, 245, 239, 0.7);
+        max-width: 320px;
+    }
+    .footer__col-title {
+        font-family: var(--font-mono);
+        font-size: var(--fs-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--color-lime);
+        margin-bottom: 16px;
+    }
+    .footer__list { display: flex; flex-direction: column; gap: 10px; }
+    .footer__list a {
+        font-size: 0.95rem;
+        color: rgba(247, 245, 239, 0.75);
+        transition: color var(--dur-fast);
+    }
+    .footer__list a:hover { color: var(--color-lime); }
+
+    .footer__closing {
+        padding: 80px 0 60px;
+        text-align: center;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(3rem, 14vw, 14rem);
+        line-height: 0.84;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+        color: var(--color-paper);
+    }
+    .footer__closing .lime-bg {
+        background: var(--color-lime);
+        color: var(--color-black);
+        padding: 0 16px;
+    }
+    .footer__closing .italic { font-style: italic; }
+
+    .footer__bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding-top: 32px;
+        border-top: 1px solid rgba(247, 245, 239, 0.15);
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(247, 245, 239, 0.5);
+        flex-wrap: wrap;
+    }
+    .footer__legal {
+        display: flex;
+        gap: 20px;
+    }
+    .footer__social {
+        display: flex;
+        gap: 16px;
+    }
+    .footer__social a {
+        width: 36px; height: 36px;
+        display: flex; align-items: center; justify-content: center;
+        border: 1px solid rgba(247, 245, 239, 0.25);
+        border-radius: 50%;
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        color: rgba(247, 245, 239, 0.7);
+        transition: background var(--dur-fast), color var(--dur-fast);
+    }
+    .footer__social a:hover {
+        background: var(--color-lime);
+        color: var(--color-black);
+        border-color: var(--color-lime);
+    }
+
+    /* ============================================================
+       REDUCED MOTION
+       ============================================================ */
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+        [data-reveal] { opacity: 1; transform: none; }
+        .hero__headline .word,
+        .final-statement__text .word {
+            opacity: 1; transform: none;
+        }
+        .loader__slogan span,
+        .loader__bar::after { animation: none; }
+        .lab__marquee-track,
+        .proof__track,
+        .campaign-reel__track { animation: none; }
+        .cursor-dot, .cursor-ring { display: none; }
+        body { cursor: auto; }
+    }
+
+    /* ============================================================
+       TABLET — independent art direction (≤1024px)
+       ============================================================ */
+    @media (max-width: 1024px) {
+        :root {
+            --page-pad: 24px;
+            --section-gap: 100px;
+        }
+        .nav__list { display: none; }
+        .cta { display: none; }
+        .nav__toggle { display: flex; }
+
+        .hero__obj--3 { left: 4%; }
+        .hero__obj--1 { right: 4%; width: 180px; height: 220px; }
+        .hero__obj--4 { left: 4%; bottom: 8%; }
+        .hero__obj--5 { left: 60%; }
+
+        .positioning__inner { grid-template-columns: 1fr; gap: 32px; }
+
+        .services__list { display: none; }
+        .services__mobile { display: block; }
+
+        .campaign--01,
+        .campaign--05 { grid-template-columns: 1fr; }
+        .campaign--03 .campaign__grid { grid-template-columns: repeat(3, 1fr); }
+        .campaign--03 .grid-tile--5 { grid-column: span 1; aspect-ratio: 1; }
+
+        .results__grid { grid-template-columns: repeat(2, 1fr); }
+
+        .lab__grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 180px; }
+        .lab-tile--1, .lab-tile--4, .lab-tile--7 { grid-column: span 2; }
+
+        /* Culture grid — only person--1 spans 2 cols on tablet; person--5 reverts to 1 col to avoid layout gap. */
+        .culture__grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px; grid-auto-flow: dense; }
+        .person--1 { grid-column: span 2; }
+
+        .insights__featured,
+        .insights__list { grid-template-columns: 1fr; }
+        .insights__list { gap: 20px; }
+        .insight-card__visual { aspect-ratio: 16 / 9; }
+
+        .contact__inner { grid-template-columns: 1fr; gap: 40px; }
+        .contact__panel { margin: 0 auto; }
+
+        .footer__top { grid-template-columns: 1fr 1fr; }
+
+        /* PROCESS — disable sticky scroll-storytelling on tablet too; stack stages for legibility + performance. */
+        .process__sticky-wrap { height: auto; }
+        .process__sticky { position: relative; height: auto; padding: 60px var(--page-pad); }
+        .process__stage {
+            position: relative;
+            opacity: 1;
+            transform: none;
+            min-height: 50vh;
+            padding: 48px 0;
+            border-bottom: 1px solid rgba(9,9,9,0.15);
+        }
+        .process__stage:last-child { border-bottom: none; }
+        .process__stage-name { font-size: clamp(3rem, 14vw, 5rem); }
+        .process__progress { display: none; }
+    }
+
+    /* ============================================================
+       MOBILE — independent art direction (≤767px)
+       ============================================================ */
+    @media (max-width: 767px) {
+        :root {
+            --page-pad: 20px;
+            --section-gap: 80px;
+        }
+        .header { padding: 14px var(--page-pad); }
+        .header.is-scrolled { padding: 10px var(--page-pad); }
+        .logo { font-size: 1.15rem; }
+        .cta { padding: 10px 16px; font-size: 0.7rem; }
+
+        /* HERO — type fills screen, visuals move vertically */
+        .hero { padding: 96px var(--page-pad) 0; min-height: 92vh; }
+        .hero__obj--1,
+        .hero__obj--2,
+        .hero__obj--3,
+        .hero__obj--4,
+        .hero__obj--5 { display: none; }
+        .hero__meta { font-size: 9px; flex-wrap: wrap; gap: 8px; }
+        .hero__bottom { flex-direction: column; align-items: flex-start; gap: 24px; }
+        .hero__desc { font-size: 0.95rem; }
+
+        /* Mobile-only campaign visual: vertical strip down side */
+        .hero__mobile-strip {
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 32px;
+            display: flex;
+            flex-direction: column;
+            z-index: 1;
+        }
+        .hero__mobile-strip span {
+            flex: 1;
+            border-bottom: 1px solid rgba(247, 245, 239, 0.1);
+        }
+        .hero__mobile-strip span:nth-child(1) { background: var(--color-pink); }
+        .hero__mobile-strip span:nth-child(2) { background: var(--color-lime); }
+        .hero__mobile-strip span:nth-child(3) { background: var(--color-orange); }
+        .hero__mobile-strip span:nth-child(4) { background: var(--color-blue); }
+        @media (min-width: 768px) { .hero__mobile-strip { display: none; } }
+
+        .hero-transition__meta { font-size: 9px; gap: 12px; }
+
+        .positioning__statement { font-size: 1.6rem; line-height: 1.15; }
+
+        /* MANIFESTO — words appear one at a time as user scrolls */
+        .manifesto__main { font-size: clamp(2.4rem, 14vw, 5rem); }
+        .manifesto__list { grid-template-columns: 1fr; gap: 24px; }
+
+        /* SERVICES — already mobile-specific chain */
+        .services__mobile-intro { font-size: 1.6rem; }
+
+        /* CAMPAIGN REEL — vertical */
+        .campaign-reel__track {
+            flex-direction: row;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 0 var(--page-pad) 60px;
+        }
+        .reel-card { flex: 0 0 260px; }
+
+        /* FEATURED WORK */
+        .campaign--01 { gap: 24px; }
+        .campaign--03 .campaign__grid { grid-template-columns: repeat(2, 1fr); }
+        .campaign--04 { height: 70vh; min-height: 400px; }
+
+        /* RESULTS — stack */
+        .results__grid { grid-template-columns: 1fr; }
+        .result-cell { min-height: 220px; padding: 28px 20px; }
+
+        /* LAB — single column */
+        .lab__grid { grid-template-columns: 1fr; grid-auto-rows: 160px; }
+        .lab-tile--1, .lab-tile--4, .lab-tile--7 { grid-column: span 1; }
+
+        /* PROCESS — already stacked at tablet; smaller stage name on mobile */
+        .process__stage-name { font-size: clamp(3rem, 18vw, 4.5rem); }
+        .process__stage { min-height: auto; padding: 40px 0; }
+
+        /* CULTURE — single column */
+        .culture__grid { grid-template-columns: 1fr; grid-auto-rows: 200px; }
+        .person--1 { grid-column: span 1; }
+
+        /* PROOF — ticker still works */
+        .proof__quote { font-size: 1.1rem; }
+
+        /* INSIGHTS — single column */
+        .insights__featured { gap: 24px; }
+        .insights__list { grid-template-columns: 1fr; gap: 32px; }
+
+        /* FINAL STATEMENT — type smaller, still dramatic */
+        .final-statement { padding: 60px var(--page-pad); min-height: 80vh; }
+
+        /* CONTACT — CTA becomes full-width interaction */
+        .contact__inner { gap: 32px; }
+        .contact__actions { flex-direction: column; align-items: stretch; }
+        .contact__cta,
+        .contact__secondary { width: 100%; justify-content: center; }
+        .contact__panel { padding: 28px 20px; max-width: none; margin: 0; }
+
+        /* FOOTER */
+        .footer__top { grid-template-columns: 1fr; gap: 32px; padding-bottom: 40px; }
+        .footer__closing { padding: 60px 0 40px; }
+        .footer__bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+        .footer__legal { flex-wrap: wrap; gap: 12px; }
+    }
+
+    /* Print: clean static representation */
+    @media print {
+        .loader, .cursor-dot, .cursor-ring, .mobile-nav, .nav__toggle { display: none !important; }
+        body { background: #fff; color: #000; cursor: auto; }
+        * { animation: none !important; transition: none !important; }
+    }
+    </style>
+</head>
+<body class="is-loading">
+
+<!-- ============================================================
+     LOADING SCREEN — campaign opening sequence
+============================================================ -->
+<div class="loader" id="loader" role="status" aria-live="polite" aria-label="Loading">
+    <div class="loader__top">
+        <span class="loader__brand">ATTN<span class="slash">/</span></span>
+        <span>FILE 001 — ATTENTION MACHINE</span>
+    </div>
+
+    <div class="loader__center">
+        <div class="loader__slogan" id="loaderSlogan">
+            <span style="animation-delay:0s">CAPTURE</span>
+            <span style="animation-delay:0.15s">ATTENTION.</span>
+        </div>
+        <div class="loader__counter-row">
+            <div class="loader__counter" id="loaderCounter">000<span class="pct">%</span></div>
+            <div class="loader__words">CAPTURE — BUILD — CREATE — MAKE</div>
+        </div>
+        <div class="loader__bar" aria-hidden="true"></div>
+    </div>
+
+    <div class="loader__top">
+        <span>NEW YORK · 40.7128°N 74.0060°W</span>
+        <span>v 2026.09 — ALL RIGHTS RESERVED</span>
+    </div>
+</div>
+
+<!-- ============================================================
+     CUSTOM CURSOR — desktop only
+============================================================ -->
+<div class="cursor-ring" id="cursorRing" aria-hidden="true">
+    <span class="cursor-ring__label" id="cursorLabel">VIEW</span>
+</div>
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+<!-- ============================================================
+     HEADER / NAVIGATION
+============================================================ -->
+<header class="header" id="header">
+    <a href="#top" class="logo" aria-label="ATTN — back to top">
+        ATTN<span class="slash">/</span><span class="dot" aria-hidden="true"></span>
+    </a>
+
+    <nav class="nav" aria-label="Primary">
+        <ul class="nav__list">
+            <li><a href="#work" class="nav__link"><span class="num">01</span>Work</a></li>
+            <li><a href="#services" class="nav__link"><span class="num">02</span>Services</a></li>
+            <li><a href="#about" class="nav__link"><span class="num">03</span>About</a></li>
+            <li><a href="#insights" class="nav__link"><span class="num">04</span>Insights</a></li>
+            <li><a href="#culture" class="nav__link"><span class="num">05</span>Careers</a></li>
+            <li><a href="#contact" class="nav__link"><span class="num">06</span>Contact</a></li>
+        </ul>
+        <a href="#contact" class="cta" data-cursor="open">
+            <span>Start a Project</span>
+            <span class="arrow" aria-hidden="true">→</span>
+        </a>
+        <button class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+</header>
+
+<!-- Mobile overlay nav -->
+<div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Main navigation">
+    <button class="mobile-nav__close" id="navClose" aria-label="Close menu"></button>
+    <ul class="mobile-nav__list">
+        <li class="mobile-nav__item"><a href="#work" class="mobile-nav__link">Work <span class="num">01</span></a></li>
+        <li class="mobile-nav__item"><a href="#services" class="mobile-nav__link">Services <span class="num">02</span></a></li>
+        <li class="mobile-nav__item"><a href="#about" class="mobile-nav__link">About <span class="num">03</span></a></li>
+        <li class="mobile-nav__item"><a href="#insights" class="mobile-nav__link">Insights <span class="num">04</span></a></li>
+        <li class="mobile-nav__item"><a href="#culture" class="mobile-nav__link">Careers <span class="num">05</span></a></li>
+        <li class="mobile-nav__item"><a href="#contact" class="mobile-nav__link">Contact <span class="num">06</span></a></li>
+    </ul>
+</div>
+
+<main id="top">
+
+<!-- ============================================================
+     HERO — THE ATTENTION MACHINE
+============================================================ -->
+<section class="hero" id="hero" aria-label="Hero — We Make People Look">
+    <div class="hero__grid-bg" aria-hidden="true"></div>
+    <div class="hero__mobile-strip" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="hero__objects" id="heroObjects" aria-hidden="true">
+        <div class="hero__obj hero__obj--1" data-depth="0.06"><img class="hero__obj-media" src="https://attn.wuaze.com/wp-content/uploads/2026/09/Phone_scrolling_social_media_feed_20260919181118.gif" alt="" aria-hidden="true" loading="lazy"></div>
+        <div class="hero__obj hero__obj--2" data-depth="0.12"><img class="hero__obj-media" src="https://attn.wuaze.com/wp-content/uploads/2026/09/hero__obj-2_20260919181438.gif" alt="" aria-hidden="true" loading="lazy"></div>
+        <div class="hero__obj hero__obj--3" data-depth="0.04"><img class="hero__obj-media" src="https://attn.wuaze.com/wp-content/uploads/2026/09/hero__obj-3_20260919181250.gif" alt="" aria-hidden="true" loading="lazy"></div>
+        <div class="hero__obj hero__obj--4" data-depth="0.09">
+            <img class="hero__obj-media" src="https://attn.wuaze.com/wp-content/uploads/2026/09/hero__obj-4_20260919181343.gif" alt="" aria-hidden="true" loading="lazy">
+            <span class="hero__obj--4-scrim" aria-hidden="true"></span>
+            <span class="hero__obj--4-label">FRESH DROP<br>09.19.26</span>
+        </div>
+        <div class="hero__obj hero__obj--5" data-depth="0.14"><img class="hero__obj-media" src="https://attn.wuaze.com/wp-content/uploads/2026/09/hero__obj-5_20260919181220.gif" alt="" aria-hidden="true" loading="lazy"></div>
+    </div>
+
+    <div class="hero__content">
+        <div class="hero__meta">
+            <span>SCROLL TO BEGIN <span class="lime">↓</span></span>
+        </div>
+
+        <h1 class="hero__headline">
+            <span class="line"><span class="word">WE</span> <span class="word">MAKE</span></span>
+            <span class="line"><span class="word">PEOPLE</span></span>
+            <span class="line">
+                <span class="hero__morph" id="heroMorph" aria-live="polite">
+                    <span class="word is-active">LOOK.</span>
+                    <span class="word">STOP.</span>
+                    <span class="word">FEEL.</span>
+                    <span class="word">REMEMBER.</span>
+                    <span class="word">ACT.</span>
+                </span>
+            </span>
+        </h1>
+
+        <div class="hero__bottom">
+            <p class="hero__desc">
+                We are <strong>ATTN/</strong> — a digital marketing agency that turns
+                attention into action. Strategy. Creative. Content. Media. All
+                engineered to move brands forward — and make people stop, then move.
+            </p>
+            <div class="hero__scroll" aria-hidden="true">
+                <span>SCROLL</span>
+                <div class="line-down"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     HERO TRANSITION — collapses into ATTENTION IS A CURRENCY
+============================================================ -->
+<section class="hero-transition" id="heroTransition" aria-label="Attention is a currency">
+    <div class="hero-transition__sticky">
+        <div class="hero-transition__bg" aria-hidden="true"></div>
+        <h2 class="hero-transition__text" id="heroTransitionText">
+            ATTENTION<br>
+            IS A <span class="currency">CURRENCY.</span>
+        </h2>
+        <div class="hero-transition__meta">
+            <span>ATTN/ 002</span>
+            <span>WE SPEND IT WISELY</span>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     POSITIONING — who we are
+============================================================ -->
+<section class="positioning" id="about" aria-label="Agency positioning">
+    <div class="container">
+        <div class="positioning__inner">
+            <div class="positioning__label">
+                <div class="section-label">POSITIONING / 003</div>
+                <span class="positioning__label-text">WHO WE ARE</span>
+            </div>
+            <div data-reveal>
+                <h2 class="positioning__statement">
+                    We turn
+                    <span class="accent">attention</span> into
+                    <span class="accent">action</span>. Campaigns people
+                    <span class="lime-bg">notice</span>, remember
+                    and refuse to shut up about.
+                </h2>
+                <p class="positioning__support">
+                    Strategy. Creative. Content. Media. All pointed at one thing:
+                    making people stop, then making them move. We don't chase
+                    trends — we design culture-shaped campaigns that earn their
+                    place in feeds, conversations and memories.
+                </p>
+                <div class="positioning__tags">
+                    <span class="positioning__tag">Brand Strategy</span>
+                    <span class="positioning__tag">Creative</span>
+                    <span class="positioning__tag">Content</span>
+                    <span class="positioning__tag">Media</span>
+                    <span class="positioning__tag">Digital Experiences</span>
+                    <span class="positioning__tag">Performance</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     MANIFESTO — kinetic typography
+============================================================ -->
+<section class="manifesto" id="manifesto" aria-label="Manifesto">
+    <div class="container manifesto__inner">
+        <div class="section-label" data-reveal>MANIFESTO / 004</div>
+        <h2 class="manifesto__main" data-reveal data-swap>
+            WE DON'T<br>
+            <span class="swap-word">
+                <span class="from">CHASE</span>
+                <span class="to">DESIGN</span>
+            </span><br>
+            ATTENTION.
+        </h2>
+        <ul class="manifesto__list">
+            <li class="manifesto__item" data-reveal style="--reveal-delay:0s">Ideas should move. Brands should follow.</li>
+            <li class="manifesto__item" data-reveal style="--reveal-delay:0.08s">Brands should behave like culture, not buy it.</li>
+            <li class="manifesto__item" data-reveal style="--reveal-delay:0.16s">Campaigns should leave a mark, or don't bother.</li>
+            <li class="manifesto__item" data-reveal style="--reveal-delay:0.24s">Data should sharpen creativity, not flatten it.</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ============================================================
+     SERVICES / CAPABILITIES
+============================================================ -->
+<section class="services" id="services" aria-label="Services and capabilities">
+    <div class="container">
+        <div class="services__header">
+            <div data-reveal>
+                <div class="section-label">CAPABILITIES / 005</div>
+                <h2 class="services__title">WHAT WE <span class="accent">DO</span></h2>
+            </div>
+            <span class="services__count" data-reveal>10 DISCIPLINES · ONE MACHINE</span>
+        </div>
+    </div>
+
+    <!-- Desktop: interactive list -->
+    <div class="container">
+        <ul class="services__list" role="list">
+            <li class="service-row" data-cursor="view">
+                <span class="service-row__num">01</span>
+                <span class="service-row__name">Brand Strategy</span>
+                <span class="service-row__desc">Positioning. Narrative. Identity. We give brands a posture, not just a logo.</span>
+                <span class="service-row__tag">FOUNDATIONS</span>
+                <div class="service-row__visual service-row__visual--brand" aria-hidden="true">BRAND<br>=<br>BEHAVIOUR</div>
+            </li>
+            <li class="service-row" data-cursor="view">
+                <span class="service-row__num">02</span>
+                <span class="service-row__name">Creative Campaigns</span>
+                <span class="service-row__desc">Big ideas engineered to stop the scroll, start the talk, outlive the news cycle.</span>
+                <span class="service-row__tag">IDEAS</span>
+                <div class="service-row__visual service-row__visual--creative" aria-hidden="true">★</div>
+            </li>
+            <li class="service-row" data-cursor="view">
+                <span class="service-row__num">03</span>
+                <span class="service-row__name">Digital Marketing</span>
+                <span class="service-row__desc">Full-funnel across paid, owned, earned. Engineered for movement you can measure.</span>
+                <span class="service-row__tag">FULL-FUNNEL</span>
+                <div class="service-row__visual service-row__visual--digital" aria-hidden="true">
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                </div>
+            </li>
+            <li class="service-row" data-cursor="view">
+                <span class="service-row__num">04</span>
+                <span class="service-row__name">Social Media</span>
+                <span class="service-row__desc">Always-on social operating systems. Built for platforms. Built for the algorithm. Built for people.</span>
+                <span class="service-row__tag">CULTURE OPS</span>
+                <div class="service-row__visual service-row__visual--social" aria-hidden="true">SOCIAL</div>
+            </li>
+            <li class="service-row" data-cursor="view">
+                <span class="service-row__num">05</span>
+                <span class="service-row__name">Content</span>
+                <span class="service-row__desc">Editorial. Video. Photo. Design. At scale. Built for feeds. Built to last.</span>
+                <span class="service-row__tag">EDITORIAL</span>
+                <div class="service-row__visual service-row__visual--content" aria-hidden="true">WORDS<br>IMAGES<br>MOTION</div>
+            </li>
+            <li class="service-row" data-cursor="view">
+                <span class="service-row__num">06</span>
+                <span class="service-row__name">Performance Marketing</span>
+                <span class="service-row__desc">Conversion-led media. We test, attribute, iterate. Weekly. Sometimes daily.</span>
+                <span class="service-row__tag">ROAS</span>
+                <div class="service-row__visual service-row__visual--performance" aria-hidden="true">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+            </li>
+            <li class="service-row" data-cursor="view">
+                <span class="service-row__num">07</span>
+                <span class="service-row__name">Media</span>
+                <span class="service-row__desc">Channel planning. Buying. Partnerships. Social, OOH, CTV, audio, print — coordinated.</span>
+                <span class="service-row__tag">PLANNING</span>
+                <div class="service-row__visual service-row__visual--media" aria-hidden="true"></div>
+            </li>
+            <li class="service-row" data-cursor="view">
+                <span class="service-row__num">08</span>
+                <span class="service-row__name">Digital Experiences</span>
+                <span class="service-row__desc">Websites. Products. Immersive moments. Built for the way people actually behave.</span>
+                <span class="service-row__tag">PRODUCT</span>
+                <div class="service-row__visual service-row__visual--experiences" aria-hidden="true"></div>
+            </li>
+            <li class="service-row" data-cursor="view">
+                <span class="service-row__num">09</span>
+                <span class="service-row__name">Influencer / Creator</span>
+                <span class="service-row__desc">Creator partnerships as campaigns, not posts. Strategy. Casting. Management. Measurement.</span>
+                <span class="service-row__tag">CREATORS</span>
+                <div class="service-row__visual service-row__visual--influencer" aria-hidden="true">@</div>
+            </li>
+            <li class="service-row" data-cursor="view">
+                <span class="service-row__num">10</span>
+                <span class="service-row__name">Analytics & Optimization</span>
+                <span class="service-row__desc">Data infra. Dashboards. Creative analytics. Compounding into better work every quarter.</span>
+                <span class="service-row__tag">INTELLIGENCE</span>
+                <div class="service-row__visual service-row__visual--analytics" aria-hidden="true">%+</div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Mobile: interactive word chain -->
+    <div class="services__mobile">
+        <div class="section-label" style="margin-bottom:24px">CAPABILITIES / MOBILE</div>
+        <h3 class="services__mobile-intro">WE TURN</h3>
+        <div class="services__mobile-chain" id="mobileChain">
+            <div class="services__mobile-word is-active" data-cursor="drag">IDEAS</div>
+            <div class="services__mobile-arrow">↓</div>
+            <div class="services__mobile-word" data-cursor="drag">BRANDS</div>
+            <div class="services__mobile-arrow">↓</div>
+            <div class="services__mobile-word" data-cursor="drag">PRODUCTS</div>
+            <div class="services__mobile-arrow">↓</div>
+            <div class="services__mobile-word" data-cursor="drag">MESSAGES</div>
+            <div class="services__mobile-arrow">↓</div>
+            <div class="services__mobile-word" data-cursor="drag">DATA</div>
+        </div>
+        <h3 class="services__mobile-final">INTO CAMPAIGNS.</h3>
+        <p style="margin-top:24px; color:rgba(247,245,239,0.6); font-size:0.95rem; line-height:1.5;">
+            Tap a word to explore that capability. We don't sell services — we build machines
+            that turn raw inputs into measurable attention.
+        </p>
+    </div>
+</section>
+
+<!-- ============================================================
+     CAMPAIGN REEL — horizontal archive
+============================================================ -->
+<section class="campaign-reel" id="reel" aria-label="Campaign reel">
+    <div class="campaign-reel__header">
+        <div data-reveal>
+            <div class="section-label" style="color:var(--color-black)">REEL / 006</div>
+            <h2 class="campaign-reel__title">SELECTED <span class="lime-bg">CAMPAIGNS</span></h2>
+        </div>
+        <span class="campaign-reel__hint" data-reveal>← DRAG / SWIPE →</span>
+    </div>
+    <div class="campaign-reel__track" id="reelTrack" data-cursor="drag">
+        <!-- Cards generated below -->
+        <article class="reel-card">
+            <div class="reel-card__visual reel-card__visual--1" aria-hidden="true"></div>
+            <div class="reel-card__meta"><span>FASHION · LAUNCH</span><span>2025</span></div>
+            <h3 class="reel-card__title">Rebel Heart</h3>
+            <p class="reel-card__client">For NOVA Atelier</p>
+            <span class="reel-card__result">+284% engagement</span>
+        </article>
+        <article class="reel-card">
+            <div class="reel-card__visual reel-card__visual--2" aria-hidden="true"></div>
+            <div class="reel-card__meta"><span>BEVERAGE · CULTURE</span><span>2025</span></div>
+            <h3 class="reel-card__title">Cold Drop Society</h3>
+            <p class="reel-card__client">For BREW/9 Coffee</p>
+            <span class="reel-card__result">3.8M people reached</span>
+        </article>
+        <article class="reel-card">
+            <div class="reel-card__visual reel-card__visual--3" aria-hidden="true">72</div>
+            <div class="reel-card__meta"><span>TECH · PRODUCT</span><span>2024</span></div>
+            <h3 class="reel-card__title">72 Hours of Pulse</h3>
+            <p class="reel-card__client">For Halt Watches</p>
+            <span class="reel-card__result">+71% conversion</span>
+        </article>
+        <article class="reel-card">
+            <div class="reel-card__visual reel-card__visual--4" aria-hidden="true">STREET<br>LEVEL</div>
+            <div class="reel-card__meta"><span>FMCG · SOCIAL</span><span>2024</span></div>
+            <h3 class="reel-card__title">Street Level</h3>
+            <p class="reel-card__client">For Tundra Snacks</p>
+            <span class="reel-card__result">42M organic impressions</span>
+        </article>
+        <article class="reel-card">
+            <div class="reel-card__visual reel-card__visual--5" aria-hidden="true"></div>
+            <div class="reel-card__meta"><span>FINTECH · PERFORMANCE</span><span>2024</span></div>
+            <h3 class="reel-card__title">Compound Interest</h3>
+            <p class="reel-card__client">For Vela Banking</p>
+            <span class="reel-card__result">6.2× ROAS</span>
+        </article>
+        <article class="reel-card">
+            <div class="reel-card__visual reel-card__visual--6" aria-hidden="true">REFRAME<br>THE STATUS<br>QUO</div>
+            <div class="reel-card__meta"><span>AUTO · BRAND</span><span>2023</span></div>
+            <h3 class="reel-card__title">Reframe</h3>
+            <p class="reel-card__client">For KERRA Motors</p>
+            <span class="reel-card__result">+190% brand recall</span>
+        </article>
+    </div>
+</section>
+
+<!-- ============================================================
+     FEATURED WORK — 5 distinct campaign layouts
+============================================================ -->
+<section class="work" id="work" aria-label="Featured work">
+    <div class="work__header">
+        <div data-reveal>
+            <div class="section-label">WORK / 007</div>
+            <h2 class="work__title">FEATURED <span class="accent">CAMPAIGNS</span></h2>
+        </div>
+        <p class="work__sub" data-reveal>Five campaigns. Five distinct treatments. One studio that refuses to repeat itself.</p>
+    </div>
+
+    <!-- 01 — Brand transformation -->
+    <article class="campaign campaign--01" data-reveal>
+        <div class="campaign__meta">
+            <span><span class="num">01</span> — BRAND TRANSFORMATION</span>
+            <span>FASHION · 2025</span>
+        </div>
+        <div class="campaign__visual" data-cursor="view" aria-label="Rebel Heart campaign visual"></div>
+        <div class="campaign__copy">
+            <h3 class="campaign__name">Rebel Heart</h3>
+            <p class="campaign__desc">
+                NOVA Atelier didn't need an ad. They needed to become a subculture.
+                We rebuilt the identity, dropped a 60-second manifesto film, and
+                let the community take it from there.
+            </p>
+            <div class="campaign__tags">
+                <span class="campaign__tag">Identity</span>
+                <span class="campaign__tag">Film</span>
+                <span class="campaign__tag">OOH</span>
+                <span class="campaign__tag">Social</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- 02 — Product launch -->
+    <article class="campaign campaign--02" data-reveal>
+        <div class="campaign__meta">
+            <span><span class="num">02</span> — PRODUCT LAUNCH</span>
+            <span>WATCHES · 2024</span>
+        </div>
+        <div class="campaign__visual" data-cursor="view">72</div>
+        <h3 class="campaign__name">72 Hours of Pulse</h3>
+        <p class="campaign__desc">
+            72 hours. 72 creators. 72 cities. One ticking moment for Halt's
+            chronograph launch. Sold out before the final hour.
+        </p>
+    </article>
+
+    <!-- 03 — Social campaign -->
+    <article class="campaign campaign--03" data-reveal>
+        <div class="campaign__meta">
+            <span><span class="num">03</span> — SOCIAL CAMPAIGN</span>
+            <span>FMCG · 2024</span>
+        </div>
+        <div class="campaign__head">
+            <h3 class="campaign__name">Street Level</h3>
+            <p class="campaign__desc">For Tundra Snacks. We turned 4,000 bodegas into 4,000 media channels.</p>
+        </div>
+        <div class="campaign__grid">
+            <div class="grid-tile grid-tile--1" data-cursor="view"><span class="grid-tile__text">BODEGA 01</span></div>
+            <div class="grid-tile grid-tile--2" data-cursor="view"><span class="grid-tile__text">04 BOROUGHS</span></div>
+            <div class="grid-tile grid-tile--3" data-cursor="view"><span class="grid-tile__text">42M REACH</span></div>
+            <div class="grid-tile grid-tile--4" data-cursor="view"><span class="grid-tile__text">+3.1k UGC</span></div>
+            <div class="grid-tile grid-tile--5" data-cursor="view"><span class="grid-tile__text">STREET LEVEL · LIVE — 30 DAYS</span></div>
+            <div class="grid-tile grid-tile--6" data-cursor="view"><span class="grid-tile__text">CONVO 1.2M</span></div>
+            <div class="grid-tile grid-tile--7" data-cursor="view"><span class="grid-tile__text">+71% SALES</span></div>
+        </div>
+    </article>
+
+    <!-- 04 — Cultural campaign -->
+    <article class="campaign campaign--04" data-reveal>
+        <span class="campaign__overlay">04 · CULTURAL CAMPAIGN</span>
+        <div class="campaign__visual">
+            <h3 class="campaign__name">MAKE NOISE.</h3>
+            <p class="campaign__desc">
+                Not an ad. A 14-day cultural moment. Murals. Live recordings.
+                Limited pressings. Closing night: 3,200 seats gone in 90 seconds.
+                For the Brooklyn Sound Foundation.
+            </p>
+        </div>
+    </article>
+
+    <!-- 05 — Performance campaign -->
+    <article class="campaign campaign--05" data-reveal>
+        <div class="campaign__meta">
+            <span><span class="num">05</span> — PERFORMANCE CAMPAIGN</span>
+            <span>FINTECH · 2024</span>
+        </div>
+        <div class="campaign__copy">
+            <h3 class="campaign__name">Compound Interest</h3>
+            <p class="campaign__desc">
+                Vela wanted deposits, not impressions. So we built a performance
+                machine: 14 creative variants, 6 channels, weekly iteration. Six
+                months in: 6.2× ROAS. Still compounding.
+            </p>
+            <div class="campaign__tags">
+                <span class="campaign__tag">Paid Social</span>
+                <span class="campaign__tag">Search</span>
+                <span class="campaign__tag">CTV</span>
+                <span class="campaign__tag">Lifecycle</span>
+            </div>
+        </div>
+        <div class="campaign__chart">
+            <span class="chart__label">DEPOSITS · MO 1 → MO 6</span>
+            <span class="chart__big">$48M <span class="pct">+312%</span></span>
+            <div class="chart__bars" id="chartBars">
+                <div class="b" style="height:18%"></div>
+                <div class="b" style="height:32%"></div>
+                <div class="b" style="height:48%"></div>
+                <div class="b" style="height:64%"></div>
+                <div class="b" style="height:82%"></div>
+                <div class="b" style="height:100%"></div>
+            </div>
+            <div class="chart__axis"><span>JAN</span><span>FEB</span><span>MAR</span><span>APR</span><span>MAY</span><span>JUN</span></div>
+        </div>
+    </article>
+</section>
+
+<!-- ============================================================
+     RESULTS — animated counters
+============================================================ -->
+<section class="results" id="results" aria-label="Campaign results">
+    <div class="results__header">
+        <div class="section-label" data-reveal>RESULTS / 008</div>
+        <h2 class="results__title" data-reveal>NUMBERS THAT <span class="accent">EARNED</span> THEIR PLACE ON THE PAGE.</h2>
+    </div>
+    <div class="results__grid" id="resultsGrid">
+        <div class="result-cell" data-counter data-target="284" data-prefix="+" data-suffix="%">
+            <span class="result-cell__icon">↑</span>
+            <span class="result-cell__num"><span class="value">0</span><span class="unit">%</span></span>
+            <span class="result-cell__label">ENGAGEMENT</span>
+            <span class="result-cell__desc">Average lift across 2025 social campaigns. Attention, quantified.</span>
+        </div>
+        <div class="result-cell" data-counter data-target="3.8" data-suffix="M">
+            <span class="result-cell__icon">◉</span>
+            <span class="result-cell__num"><span class="value">0</span><span class="unit">M</span></span>
+            <span class="result-cell__label">PEOPLE REACHED</span>
+            <span class="result-cell__desc">Cold Drop Society. 30 days. Zero wasted impressions.</span>
+        </div>
+        <div class="result-cell" data-counter data-target="71" data-prefix="+" data-suffix="%">
+            <span class="result-cell__icon">↗</span>
+            <span class="result-cell__num"><span class="value">0</span><span class="unit">%</span></span>
+            <span class="result-cell__label">CONVERSION</span>
+            <span class="result-cell__desc">Average conversion lift across performance engagements. Strategy paying rent.</span>
+        </div>
+        <div class="result-cell" data-counter data-target="42" data-suffix="M">
+            <span class="result-cell__icon">◐</span>
+            <span class="result-cell__num"><span class="value">0</span><span class="unit">M</span></span>
+            <span class="result-cell__label">ORGANIC IMPRESSIONS</span>
+            <span class="result-cell__desc">Street Level. 42 million pairs of eyes. Zero paid dollars.</span>
+        </div>
+        <div class="result-cell" data-counter data-target="6.2" data-suffix="×">
+            <span class="result-cell__icon">★</span>
+            <span class="result-cell__num"><span class="value">0</span><span class="unit">×</span></span>
+            <span class="result-cell__label">ROAS</span>
+            <span class="result-cell__desc">Vela Banking. Six months in. Still compounding.</span>
+        </div>
+        <div class="result-cell" data-counter data-target="312" data-prefix="+" data-suffix="%">
+            <span class="result-cell__icon">▲</span>
+            <span class="result-cell__num"><span class="value">0</span><span class="unit">%</span></span>
+            <span class="result-cell__label">DEPOSITS LIFT</span>
+            <span class="result-cell__desc">Vela Banking's deposits. Up 312% in six months. The deck speaks for itself.</span>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     THE ATTENTION LAB
+============================================================ -->
+<section class="lab" id="lab" aria-label="The Attention Lab">
+    <div class="lab__header">
+        <div data-reveal>
+            <div class="section-label">LAB / 009</div>
+            <h2 class="lab__title">THE <span class="accent">ATTENTION LAB</span></h2>
+        </div>
+        <p class="lab__sub" data-reveal>Where we test the ideas that never make the deck — micro-campaigns, trend reactions, type experiments, social formats. The studio's scratchpad.</p>
+    </div>
+    <div class="lab__grid">
+        <div class="lab-tile lab-tile--1" data-cursor="view">FAST<br>COMPANY</div>
+        <div class="lab-tile lab-tile--2" data-cursor="view">FILE 09.A</div>
+        <div class="lab-tile lab-tile--3" data-cursor="view"></div>
+        <div class="lab-tile lab-tile--4" data-cursor="view">attention is a finite resource. we spend it like one.</div>
+        <div class="lab-tile lab-tile--5" data-cursor="view">★</div>
+        <div class="lab-tile lab-tile--6" data-cursor="view">TREND<br>REACTION<br>09.19</div>
+        <div class="lab-tile lab-tile--7" data-cursor="view">EVERY<br>SCROLL<br>IS A<br>DECISION.</div>
+        <div class="lab-tile lab-tile--8" data-cursor="view">/LAB</div>
+    </div>
+    <div class="lab__marquee" aria-hidden="true">
+        <div class="lab__marquee-track">
+            <span>MAKE</span><span class="lime italic">/</span>
+            <span>SOMETHING</span><span class="lime italic">/</span>
+            <span>PEOPLE</span><span class="lime italic">/</span>
+            <span>CAN'T</span><span class="lime italic">/</span>
+            <span>IGNORE.</span><span class="lime italic">/</span>
+            <span>MAKE</span><span class="lime italic">/</span>
+            <span>SOMETHING</span><span class="lime italic">/</span>
+            <span>PEOPLE</span><span class="lime italic">/</span>
+            <span>CAN'T</span><span class="lime italic">/</span>
+            <span>IGNORE.</span><span class="lime italic">/</span>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     PROCESS — sticky scroll storytelling
+============================================================ -->
+<section class="process" id="process" aria-label="Our process">
+    <div class="process__header">
+        <div class="section-label" data-reveal>PROCESS / 010</div>
+        <h2 class="process__title" data-reveal>HOW THE <span class="lime-bg">MACHINE</span> WORKS.</h2>
+    </div>
+    <div class="process__sticky-wrap" id="processWrap">
+        <div class="process__sticky" id="processSticky">
+            <div class="process__stage is-active" data-stage="0">
+                <span class="process__stage-num">01 / OBSERVE</span>
+                <h3 class="process__stage-name">OBSERVE</h3>
+                <p class="process__stage-desc">We watch culture. Platforms. People. Data. Before we touch a brief. Attention starts with listening.</p>
+            </div>
+            <div class="process__stage" data-stage="1">
+                <span class="process__stage-num">02 / THINK</span>
+                <h3 class="process__stage-name">THINK</h3>
+                <p class="process__stage-desc">Sharp. Opinionated. Written down. Strategy that earns its place on the page. We think before we make.</p>
+            </div>
+            <div class="process__stage" data-stage="2">
+                <span class="process__stage-num">03 / CREATE</span>
+                <h3 class="process__stage-name">CREATE</h3>
+                <p class="process__stage-desc">Big ideas, then the thousand small ones that make them real. Film. Copy. Design. Code. Sound. All in-house.</p>
+            </div>
+            <div class="process__stage" data-stage="3">
+                <span class="process__stage-num">04 / LAUNCH</span>
+                <h3 class="process__stage-name">LAUNCH</h3>
+                <p class="process__stage-desc">Coordinated drops across channels, platforms, moments. We treat launches like premieres.</p>
+            </div>
+            <div class="process__stage" data-stage="4">
+                <span class="process__stage-num">05 / LEARN</span>
+                <h3 class="process__stage-name">LEARN</h3>
+                <p class="process__stage-desc">Real-time dashboards. Weekly retros. Creative analytics. Every campaign makes the next one sharper.</p>
+            </div>
+            <div class="process__stage" data-stage="5">
+                <span class="process__stage-num">06 / AMPLIFY</span>
+                <h3 class="process__stage-name">AMPLIFY</h3>
+                <p class="process__stage-desc">What worked gets more fuel. Attention compounds into momentum. Momentum compounds into growth.</p>
+            </div>
+            <div class="process__progress" aria-hidden="true">
+                <span class="stage-dot is-active"></span>
+                <span class="stage-dot"></span>
+                <span class="stage-dot"></span>
+                <span class="stage-dot"></span>
+                <span class="stage-dot"></span>
+                <span class="stage-dot"></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     CULTURE / PEOPLE
+============================================================ -->
+<section class="culture" id="culture" aria-label="Culture and people">
+    <div class="culture__header">
+        <div data-reveal>
+            <div class="section-label">CULTURE / 011</div>
+            <h2 class="culture__title">THE <span class="accent">PEOPLE</span> BEHIND THE MACHINE</h2>
+        </div>
+        <p class="culture__sub" data-reveal>Serious professionals. Creative personalities. Hover (or tap) to hear what's on their mind this week.</p>
+    </div>
+    <div class="culture__grid">
+        <article class="person person--1" data-cursor="view" tabindex="0">
+            <span class="person__role">FOUNDER · CSO</span>
+            <span class="person__name">Mara Voss</span>
+            <div class="person__statement">"Brands that behave like culture outlive brands that buy it."</div>
+        </article>
+        <article class="person person--2" data-cursor="view" tabindex="0">
+            <span class="person__role">CCO</span>
+            <span class="person__name">Theo Park</span>
+            <div class="person__statement">"If the idea doesn't make someone uncomfortable, it's not an idea yet."</div>
+        </article>
+        <article class="person person--3" data-cursor="view" tabindex="0">
+            <span class="person__role">HEAD OF MEDIA</span>
+            <span class="person__name">Ana Reyes</span>
+            <div class="person__statement">"Spend is strategy. I treat every dollar like it has a vote."</div>
+        </article>
+        <article class="person person--4" data-cursor="view" tabindex="0">
+            <span class="person__role">HEAD OF SOCIAL</span>
+            <span class="person__name">Kai Okafor</span>
+            <div class="person__statement">"Platforms reward behavior, not budgets. We behave accordingly."</div>
+        </article>
+        <article class="person person--5" data-cursor="view" tabindex="0">
+            <span class="person__role">EXECUTIVE PRODUCER</span>
+            <span class="person__name">June Sato</span>
+            <div class="person__statement">"A great campaign ships. An OK campaign is still on the timeline."</div>
+        </article>
+        <article class="person person--6" data-cursor="view" tabindex="0">
+            <span class="person__role">HEAD OF STRATEGY</span>
+            <span class="person__name">Wren Holloway</span>
+            <div class="person__statement">"Strategy is the discipline of having an opinion before the deck."</div>
+        </article>
+        <article class="person person--7" data-cursor="view" tabindex="0">
+            <span class="person__role">+ 38 MORE</span>
+            <span class="person__name">You?</span>
+            <div class="person__statement">"We're hiring across strategy, creative, production and media. Find your seat."</div>
+        </article>
+    </div>
+</section>
+
+<!-- ============================================================
+     SOCIAL PROOF
+============================================================ -->
+<section class="proof" id="proof" aria-label="Clients and testimonials">
+    <div class="proof__title-row">
+        <div data-reveal>
+            <div class="section-label">CLIENTS / 012</div>
+            <h2 class="proof__title">BRANDS THAT <span class="lime">TRUST</span> THE MACHINE</h2>
+        </div>
+        <div data-reveal>
+            <blockquote class="proof__quote">
+                ATTN/ doesn't make ads. They make moments our audience refuses to scroll past.
+            </blockquote>
+            <p class="proof__author">— SLOAN ARMITAGE · CMO, NOVA ATELIER</p>
+        </div>
+    </div>
+    <div class="proof__ticker">
+        <div class="proof__track" id="proofTrack">
+            <span class="brand">NOVA Atelier</span>
+            <span class="brand">BREW/9</span>
+            <span class="brand">Halt Watches</span>
+            <span class="brand">Tundra Snacks</span>
+            <span class="brand">Vela Banking</span>
+            <span class="brand">KERRA Motors</span>
+            <span class="brand">Brooklyn Sound Foundation</span>
+            <span class="brand">MOON Co.</span>
+            <span class="brand">Verge Studios</span>
+            <span class="brand">Halo Health</span>
+            <span class="brand">Atlas Foods</span>
+            <span class="brand">Brightline Press</span>
+            <!-- Duplicate for seamless loop -->
+            <span class="brand" aria-hidden="true">NOVA Atelier</span>
+            <span class="brand" aria-hidden="true">BREW/9</span>
+            <span class="brand" aria-hidden="true">Halt Watches</span>
+            <span class="brand" aria-hidden="true">Tundra Snacks</span>
+            <span class="brand" aria-hidden="true">Vela Banking</span>
+            <span class="brand" aria-hidden="true">KERRA Motors</span>
+            <span class="brand" aria-hidden="true">Brooklyn Sound Foundation</span>
+            <span class="brand" aria-hidden="true">MOON Co.</span>
+            <span class="brand" aria-hidden="true">Verge Studios</span>
+            <span class="brand" aria-hidden="true">Halo Health</span>
+            <span class="brand" aria-hidden="true">Atlas Foods</span>
+            <span class="brand" aria-hidden="true">Brightline Press</span>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     INSIGHTS
+============================================================ -->
+<section class="insights" id="insights" aria-label="Insights and writing">
+    <div class="insights__header">
+        <div data-reveal>
+            <div class="section-label">INSIGHTS / 013</div>
+            <h2 class="insights__title">THE INTERNET MOVES FAST. <span class="accent">YOUR BRAND SHOULD MOVE SMARTER.</span></h2>
+        </div>
+    </div>
+    <article class="insights__featured" data-reveal>
+        <div class="insights__featured-visual" aria-hidden="true"></div>
+        <div class="insights__featured-text">
+            <div class="insights__meta-row">
+                <span>TREND REPORT</span><span>09.19.26</span><span>14 MIN READ</span>
+            </div>
+            <h3 class="insights__featured-headline">The 2026 Attention Economy: Where Culture, Platforms and Brands Actually Meet</h3>
+            <p class="insights__featured-dek">
+                We tracked 4,200 campaigns across 11 platforms and 6 industries to find
+                what actually predicts attention. The findings reshaped how we brief,
+                build and measure. Here's what changed — and what should change for you.
+            </p>
+            <a href="#" class="insights__featured-cta">Read the report →</a>
+        </div>
+    </article>
+    <div class="insights__list">
+        <article class="insight-card" data-reveal>
+            <div class="insight-card__visual insight-card__visual--1" data-text="ESSAY"></div>
+            <div class="insights__meta-row"><span>ESSAY</span><span>5 MIN</span></div>
+            <h3 class="insight-card__title">Why "always-on" is mostly always-off</h3>
+            <p class="insight-card__dek">A defense of campaign thinking in a feed-driven world — and how to blend both.</p>
+        </article>
+        <article class="insight-card" data-reveal style="--reveal-delay:0.1s">
+            <div class="insight-card__visual insight-card__visual--2" data-text="ANALYSIS"></div>
+            <div class="insights__meta-row"><span>ANALYSIS</span><span>7 MIN</span></div>
+            <h3 class="insight-card__title">Creative analytics: measuring what the deck can't</h3>
+            <p class="insight-card__dek">The metrics that actually predict whether an idea will travel.</p>
+        </article>
+        <article class="insight-card" data-reveal style="--reveal-delay:0.2s">
+            <div class="insight-card__visual insight-card__visual--3" data-text="MEMO"></div>
+            <div class="insights__meta-row"><span>MEMO</span><span>4 MIN</span></div>
+            <h3 class="insight-card__title">A short memo on brand vs. performance — and why it's a false fight</h3>
+            <p class="insight-card__dek">What we actually believe about the binary that won't die.</p>
+        </article>
+    </div>
+</section>
+
+<!-- ============================================================
+     FINAL CAMPAIGN STATEMENT
+============================================================ -->
+<section class="final-statement" id="finalStatement" aria-label="Final campaign statement">
+    <div class="final-statement__bg" aria-hidden="true"></div>
+    <span class="final-statement__corner">FILE 014 · CLOSING STATEMENT</span>
+    <span class="final-statement__corner final-statement__corner--r">NEW YORK · 2026</span>
+    <h2 class="final-statement__text" id="finalStatementText">
+        <span class="word">MAKE</span>
+        <span class="word">SOMETHING</span>
+        <span class="word">PEOPLE</span>
+        <span class="word italic">CAN'T</span>
+        <span class="word"><span class="lime-bg">IGNORE.</span></span>
+    </h2>
+</section>
+
+<!-- ============================================================
+     CONTACT / CONVERSION
+============================================================ -->
+<section class="contact" id="contact" aria-label="Start a project">
+    <div class="contact__inner">
+        <div data-reveal>
+            <div class="section-label" style="color:var(--color-black)">CONTACT / 015</div>
+            <h2 class="contact__headline">GOT A <span class="accent">BIG</span> IDEA?</h2>
+            <p class="contact__sub">
+                Let's turn it into something people notice, remember and refuse to
+                shut up about. We partner with brands that want to move culture,
+                not just move product.
+            </p>
+            <div class="contact__actions">
+                <a href="#contactForm" class="contact__cta" id="openForm" data-cursor="open">
+                    <span>Start a Project</span>
+                    <span aria-hidden="true">→</span>
+                </a>
+                <a href="mailto:hello@attn.agency" class="contact__secondary" data-cursor="view">
+                    Talk to Us
+                </a>
+            </div>
+        </div>
+        <form class="contact__panel" id="contactForm" aria-label="Project inquiry form" novalidate>
+            <h3 class="contact__panel-title">START A <span class="lime">PROJECT</span></h3>
+            <div class="contact__field">
+                <label for="name">Your name</label>
+                <input type="text" id="name" name="name" required autocomplete="name" placeholder="Sloan Armitage">
+            </div>
+            <div class="contact__field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@brand.com">
+            </div>
+            <div class="contact__field">
+                <label for="company">Company / Brand</label>
+                <input type="text" id="company" name="company" autocomplete="organization" placeholder="NOVA Atelier">
+            </div>
+            <div class="contact__field">
+                <label for="budget">Project type</label>
+                <select id="budget" name="budget" required>
+                    <option value="">Select one</option>
+                    <option>Brand transformation</option>
+                    <option>Creative campaign</option>
+                    <option>Performance / paid media</option>
+                    <option>Digital experience / product</option>
+                    <option>Retainer / always-on</option>
+                    <option>Something else</option>
+                </select>
+            </div>
+            <div class="contact__field">
+                <label for="message">Tell us about it</label>
+                <textarea id="message" name="message" required placeholder="What are you trying to make people do?"></textarea>
+            </div>
+            <button type="submit" class="contact__submit">Send the brief →</button>
+            <p class="contact__panel-note">We reply to every serious inquiry within 48 hours.</p>
+        </form>
+    </div>
+</section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer class="footer" aria-label="Footer">
+    <div class="footer__top">
+        <div class="footer__brand">
+            <div class="footer__logo">ATTN<span class="slash">/</span></div>
+            <p class="footer__tagline">
+                The Attention Machine. A digital marketing agency building campaigns
+                people notice, remember and refuse to shut up about. New York · Worldwide.
+            </p>
+        </div>
+        <div>
+            <h4 class="footer__col-title">Studio</h4>
+            <ul class="footer__list">
+                <li><a href="#work">Work</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#culture">Careers</a></li>
+                <li><a href="#insights">Insights</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="footer__col-title">Connect</h4>
+            <ul class="footer__list">
+                <li><a href="#contact">Start a project</a></li>
+                <li><a href="mailto:hello@attn.agency">hello@attn.agency</a></li>
+                <li><a href="tel:+12125550042">+1 212 555 0042</a></li>
+                <li><a href="#">Press inquiries</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="footer__col-title">Studio</h4>
+            <ul class="footer__list">
+                <li>1180 Broadway, Floor 9</li>
+                <li>New York, NY 10001</li>
+                <li>Mon–Fri · 09:00–19:00 ET</li>
+                <li><a href="#">Brooklyn Lab →</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer__closing" aria-hidden="true">ATTENTION, <span class="italic">WELL</span> <span class="lime-bg">SPENT.</span></div>
+
+    <div class="footer__bottom">
+        <span>© 2026 ATTN/ AGENCY LLC · ALL RIGHTS RESERVED</span>
+        <div class="footer__legal">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Cookies</a>
+            <a href="#">Accessibility</a>
+        </div>
+        <div class="footer__social">
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="X / Twitter">X</a>
+            <a href="#" aria-label="LinkedIn">LI</a>
+            <a href="#" aria-label="YouTube">YT</a>
+            <a href="#" aria-label="TikTok">TK</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+/* ============================================================
+   THE ATTENTION MACHINE — Vanilla JS
+   Organized as modules for maintainability.
+   ============================================================ */
+
+(function () {
+    "use strict";
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
+    /* ========================================================
+       1. LOADING SCREEN
+       Counts 0→100, then exits. ~2.4s total. Falls back
+       instantly if reduced-motion.
+    ======================================================== */
+    function initLoader() {
+        const loader = document.getElementById("loader");
+        const counter = document.getElementById("loaderCounter");
+        const slogan = document.getElementById("loaderSlogan");
+        if (!loader || !counter) return;
+
+        const slogans = [
+            ["CAPTURE", "ATTENTION."],
+            ["BUILD", "CULTURE."],
+            ["CREATE", "MOVEMENT."],
+            ["MAKE", "IT MATTER."]
+        ];
+
+        let sloganIndex = 0;
+        let progress = 0;
+
+        function updateSlogan() {
+            const next = slogans[sloganIndex];
+            slogan.innerHTML = "";
+            const span1 = document.createElement("span");
+            span1.textContent = next[0];
+            span1.style.animationDelay = "0s";
+            const span2 = document.createElement("span");
+            span2.textContent = next[1];
+            span2.style.animationDelay = "0.15s";
+            slogan.appendChild(span1);
+            slogan.appendChild(document.createTextNode(" "));
+            slogan.appendChild(span2);
+            sloganIndex = (sloganIndex + 1) % slogans.length;
+        }
+
+        function tick() {
+            progress += Math.random() * 6 + 2;
+            if (progress > 100) progress = 100;
+            counter.innerHTML = String(Math.floor(progress)).padStart(3, "0") + '<span class="pct">%</span>';
+            if (progress < 100) {
+                setTimeout(tick, 60);
+            } else {
+                finishLoader();
+            }
+        }
+
+        function finishLoader() {
+            loader.classList.add("is-exiting");
+            document.body.classList.remove("is-loading");
+            setTimeout(() => {
+                loader.style.display = "none";
+                // Kick off hero word animations
+                document.querySelectorAll(".hero__headline .word").forEach(w => {
+                    w.style.animationPlayState = "running";
+                });
+            }, 900);
+        }
+
+        if (prefersReducedMotion) {
+            counter.innerHTML = '100<span class="pct">%</span>';
+            finishLoader();
+            return;
+        }
+
+        document.body.classList.add("is-loading");
+        updateSlogan();
+        const sloganInterval = setInterval(updateSlogan, 600);
+        setTimeout(tick, 100);
+
+        // Safety: never block longer than 4s
+        setTimeout(() => {
+            if (progress < 100) {
+                progress = 100;
+                counter.innerHTML = '100<span class="pct">%</span>';
+                finishLoader();
+                clearInterval(sloganInterval);
+            }
+        }, 4000);
+    }
+
+    /* ========================================================
+       2. HEADER — invert on scroll + mobile nav toggle
+    ======================================================== */
+    function initHeader() {
+        const header = document.getElementById("header");
+        const navToggle = document.getElementById("navToggle");
+        const mobileNav = document.getElementById("mobileNav");
+        const navClose = document.getElementById("navClose");
+
+        // Invert on scroll
+        let lastY = 0;
+        function onScroll() {
+            const y = window.scrollY || window.pageYOffset;
+            if (y > 80) header.classList.add("is-scrolled");
+            else header.classList.remove("is-scrolled");
+            lastY = y;
+        }
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+
+        // Mobile nav open/close
+        function openNav() {
+            mobileNav.classList.add("is-open");
+            navToggle.setAttribute("aria-expanded", "true");
+            document.body.style.overflow = "hidden";
+        }
+        function closeNav() {
+            mobileNav.classList.remove("is-open");
+            navToggle.setAttribute("aria-expanded", "false");
+            document.body.style.overflow = "";
+        }
+        if (navToggle) navToggle.addEventListener("click", openNav);
+        if (navClose) navClose.addEventListener("click", closeNav);
+        mobileNav.querySelectorAll("a").forEach(a => a.addEventListener("click", closeNav));
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && mobileNav.classList.contains("is-open")) closeNav();
+        });
+    }
+
+    /* ========================================================
+       3. HERO — morphing word + parallax objects
+    ======================================================== */
+    function initHero() {
+        // Morphing word — LOOK → STOP → FEEL → REMEMBER → ACT
+        const morph = document.getElementById("heroMorph");
+        if (morph && !prefersReducedMotion) {
+            const words = morph.querySelectorAll(".word");
+            let idx = 0;
+            setInterval(() => {
+                words[idx].classList.remove("is-active");
+                idx = (idx + 1) % words.length;
+                words[idx].classList.add("is-active");
+            }, 1800);
+        }
+
+        // Parallax objects (desktop only)
+        const objects = document.getElementById("heroObjects");
+        if (!objects || isTouch || prefersReducedMotion) return;
+
+        let mouseX = 0, mouseY = 0, frame;
+        document.addEventListener("mousemove", (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2);
+            mouseY = (e.clientY - window.innerHeight / 2);
+            if (frame) return;
+            frame = requestAnimationFrame(() => {
+                objects.querySelectorAll(".hero__obj").forEach(el => {
+                    const d = parseFloat(el.dataset.depth || 0.05);
+                    el.style.transform = `translate3d(${ -mouseX * d }px, ${ -mouseY * d }px, 0)`;
+                });
+                frame = null;
+            });
+        });
+    }
+
+    /* ========================================================
+       4. SCROLL REVEAL — IntersectionObserver
+    ======================================================== */
+    function initScrollReveal() {
+        const els = document.querySelectorAll("[data-reveal]");
+        if (!els.length) return;
+
+        if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+            els.forEach(el => el.classList.add("is-visible"));
+            return;
+        }
+
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("is-visible");
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+
+        els.forEach(el => obs.observe(el));
+    }
+
+    /* ========================================================
+       5. MANIFESTO — swap CHASE → DESIGN on scroll
+    ======================================================== */
+    function initManifesto() {
+        const manifesto = document.getElementById("manifesto");
+        if (!manifesto) return;
+        if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+            manifesto.classList.add("is-swapped");
+            return;
+        }
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) manifesto.classList.add("is-swapped");
+            });
+        }, { threshold: 0.4 });
+        obs.observe(manifesto);
+    }
+
+    /* ========================================================
+       6. HERO TRANSITION — scale + fade on scroll
+    ======================================================== */
+    function initHeroTransition() {
+        const section = document.getElementById("heroTransition");
+        const text = document.getElementById("heroTransitionText");
+        if (!section || !text || prefersReducedMotion) return;
+
+        function onScroll() {
+            const rect = section.getBoundingClientRect();
+            const total = rect.height;
+            const scrolled = Math.min(Math.max(-rect.top, 0), total);
+            const progress = scrolled / total;
+            // Scale 1 → 1.4, opacity 1 → 0.3 across the section
+            const scale = 1 + progress * 0.4;
+            const opacity = 1 - progress * 0.7;
+            text.style.transform = `scale(${scale})`;
+            text.style.opacity = opacity;
+        }
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+    }
+
+    /* ========================================================
+       7. MOBILE SERVICES — tap to advance word chain
+    ======================================================== */
+    function initMobileServices() {
+        const chain = document.getElementById("mobileChain");
+        if (!chain) return;
+        const words = chain.querySelectorAll(".services__mobile-word");
+        words.forEach(w => {
+            w.addEventListener("click", () => {
+                words.forEach(x => x.classList.remove("is-active"));
+                w.classList.add("is-active");
+            });
+        });
+    }
+
+    /* ========================================================
+       8. CAMPAIGN REEL — drag-to-scroll on desktop
+    ======================================================== */
+    function initReel() {
+        const track = document.getElementById("reelTrack");
+        if (!track || isTouch) return;
+        let isDown = false, startX, scrollLeft;
+        track.addEventListener("mousedown", (e) => {
+            isDown = true;
+            track.style.cursor = "grabbing";
+            startX = e.pageX - track.offsetLeft;
+            scrollLeft = track.scrollLeft;
+        });
+        const stop = () => { isDown = false; track.style.cursor = ""; };
+        track.addEventListener("mouseleave", stop);
+        track.addEventListener("mouseup", stop);
+        track.addEventListener("mousemove", (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - track.offsetLeft;
+            const walk = (x - startX) * 1.4;
+            track.scrollLeft = scrollLeft - walk;
+        });
+    }
+
+    /* ========================================================
+       9. RESULTS — animated counters on viewport entry
+    ======================================================== */
+    function initCounters() {
+        const cells = document.querySelectorAll("[data-counter]");
+        if (!cells.length) return;
+
+        function animate(cell) {
+            const target = parseFloat(cell.dataset.target);
+            const prefix = cell.dataset.prefix || "";
+            const suffix = cell.dataset.suffix || "";
+            const valueEl = cell.querySelector(".value");
+            const duration = 1600;
+            const start = performance.now();
+            const isFloat = !Number.isInteger(target);
+
+            function step(now) {
+                const elapsed = now - start;
+                const t = Math.min(elapsed / duration, 1);
+                // easeOutExpo
+                const eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+                const current = target * eased;
+                valueEl.textContent = prefix + (isFloat ? current.toFixed(1) : Math.floor(current)) + suffix;
+                if (t < 1) requestAnimationFrame(step);
+                else valueEl.textContent = prefix + (isFloat ? target.toFixed(1) : target) + suffix;
+            }
+            requestAnimationFrame(step);
+        }
+
+        if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+            cells.forEach(cell => {
+                const target = parseFloat(cell.dataset.target);
+                const prefix = cell.dataset.prefix || "";
+                const suffix = cell.dataset.suffix || "";
+                const isFloat = !Number.isInteger(target);
+                cell.querySelector(".value").textContent =
+                    prefix + (isFloat ? target.toFixed(1) : target) + suffix;
+            });
+            return;
+        }
+
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animate(entry.target);
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        cells.forEach(c => obs.observe(c));
+    }
+
+    /* ========================================================
+       10. PROCESS — sticky scroll stage switching
+    ======================================================== */
+    function initProcess() {
+        const wrap = document.getElementById("processWrap");
+        if (!wrap) return;
+        const stages = wrap.querySelectorAll(".process__stage");
+        const dots = wrap.querySelectorAll(".stage-dot");
+        if (window.matchMedia("(max-width: 1024px)").matches) {
+            // Tablet + mobile: sticky scroll-storytelling is disabled in CSS; show all stages.
+            stages.forEach(s => s.classList.add("is-active"));
+            return;
+        }
+        if (prefersReducedMotion) {
+            stages.forEach(s => s.classList.add("is-active"));
+            return;
+        }
+
+        function onScroll() {
+            const rect = wrap.getBoundingClientRect();
+            const total = wrap.offsetHeight - window.innerHeight;
+            const scrolled = Math.min(Math.max(-rect.top, 0), total);
+            const progress = total > 0 ? scrolled / total : 0;
+            const stageIdx = Math.min(stages.length - 1, Math.floor(progress * stages.length));
+            stages.forEach((s, i) => s.classList.toggle("is-active", i === stageIdx));
+            dots.forEach((d, i) => d.classList.toggle("is-active", i === stageIdx));
+        }
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+    }
+
+    /* ========================================================
+       11. FINAL STATEMENT — words appear sequentially
+    ======================================================== */
+    function initFinalStatement() {
+        const section = document.getElementById("finalStatement");
+        const words = document.querySelectorAll("#finalStatementText .word");
+        if (!section || !words.length) return;
+
+        if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+            words.forEach(w => w.classList.add("is-visible"));
+            return;
+        }
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    words.forEach((w, i) => {
+                        setTimeout(() => w.classList.add("is-visible"), i * 180);
+                    });
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        obs.observe(section);
+    }
+
+    /* ========================================================
+       12. CUSTOM CURSOR — ring follows pointer + states
+    ======================================================== */
+    function initCursor() {
+        if (isTouch || prefersReducedMotion) return;
+        const dot = document.getElementById("cursorDot");
+        const ring = document.getElementById("cursorRing");
+        const label = document.getElementById("cursorLabel");
+        if (!dot || !ring) return;
+
+        let mouseX = 0, mouseY = 0;
+        let ringX = 0, ringY = 0;
+        let raf;
+
+        document.addEventListener("mousemove", (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+            if (!raf) {
+                raf = requestAnimationFrame(() => {
+                    // ring lags slightly for soft trailing effect
+                    ringX += (mouseX - ringX) * 0.18;
+                    ringY += (mouseY - ringY) * 0.18;
+                    ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+                    raf = null;
+                });
+            }
+        });
+
+        // State changes from data-cursor attribute
+        document.querySelectorAll("[data-cursor]").forEach(el => {
+            el.addEventListener("mouseenter", () => {
+                const state = el.dataset.cursor;
+                ring.setAttribute("data-state", state);
+                if (label) label.textContent = state;
+            });
+            el.addEventListener("mouseleave", () => {
+                ring.removeAttribute("data-state");
+            });
+        });
+
+        // Hide when leaving viewport
+        document.addEventListener("mouseleave", () => {
+            dot.style.opacity = "0";
+            ring.style.opacity = "0";
+        });
+        document.addEventListener("mouseenter", () => {
+            dot.style.opacity = "1";
+            ring.style.opacity = "1";
+        });
+    }
+
+    /* ========================================================
+       13. MAGNETIC CTA — header CTA leans toward cursor
+    ======================================================== */
+    function initMagneticCTA() {
+        if (isTouch || prefersReducedMotion) return;
+        const magnets = document.querySelectorAll(".cta, .contact__cta");
+        magnets.forEach(m => {
+            m.addEventListener("mousemove", (e) => {
+                const rect = m.getBoundingClientRect();
+                const x = e.clientX - (rect.left + rect.width / 2);
+                const y = e.clientY - (rect.top + rect.height / 2);
+                m.style.transform = `translate(${x * 0.25}px, ${y * 0.4}px)`;
+            });
+            m.addEventListener("mouseleave", () => {
+                m.style.transform = "";
+            });
+        });
+    }
+
+    /* ========================================================
+       14. CONTACT FORM — basic validation + submit feedback
+    ======================================================== */
+    function initContactForm() {
+        const form = document.getElementById("contactForm");
+        if (!form) return;
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            // Simple validation
+            const required = form.querySelectorAll("[required]");
+            let valid = true;
+            required.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = "var(--color-pink)";
+                    valid = false;
+                } else {
+                    field.style.borderColor = "";
+                }
+            });
+            const submit = form.querySelector(".contact__submit");
+            if (!valid) return;
+            if (submit) {
+                submit.textContent = "Sending...";
+                submit.disabled = true;
+                setTimeout(() => {
+                    submit.textContent = "Brief received ✓ We'll reply in 48h.";
+                    form.reset();
+                    setTimeout(() => {
+                        submit.textContent = "Send the brief →";
+                        submit.disabled = false;
+                    }, 3500);
+                }, 800);
+            }
+        });
+    }
+
+    /* ========================================================
+       15. SMOOTH ANCHOR SCROLL — for in-page navigation
+    ======================================================== */
+    function initSmoothAnchors() {
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener("click", (e) => {
+                const id = a.getAttribute("href");
+                if (id.length <= 1) return;
+                const target = document.querySelector(id);
+                if (!target) return;
+                e.preventDefault();
+                target.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
+            });
+        });
+    }
+
+    /* ========================================================
+       INITIALIZATION
+    ======================================================== */
+    function init() {
+        initLoader();
+        initHeader();
+        initHero();
+        initScrollReveal();
+        initManifesto();
+        initHeroTransition();
+        initMobileServices();
+        initReel();
+        initCounters();
+        initProcess();
+        initFinalStatement();
+        initCursor();
+        initMagneticCTA();
+        initContactForm();
+        initSmoothAnchors();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+})();
+</script>
+
+</body>
+</html>
